@@ -1,0 +1,2 @@
+tidyverse 2.0.0
+ggthemes 4.2.4
