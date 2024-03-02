@@ -6,7 +6,7 @@ This project is intented to look at some characteristics of the brazilian's educ
 In this project I will: 
   - load the necessary library;
   - import the microdata from my computer;
-  - make some exploratory data analysis;
-  - make some inference from data;
-  - make econometric analysis. 
+  - some exploratory data analysis;
+  - some inference from data;
+  - econometric analysis. 
 
