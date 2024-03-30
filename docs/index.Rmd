@@ -177,7 +177,7 @@ glimpse(censo.escolar)
     -   Computadores_em_uso_pelos_alunos_desktop;
     -   and others. should all be formatted as categorical variables.
 
-Let's change the format of variables that should be categorical.
+Let's change the format of variables that should be factors. In R, factors are used to work with categorical variables. 
 
 ```{r formating categorical variables, include=FALSE}
 censo.escolar <- censo.escolar %>% mutate(
