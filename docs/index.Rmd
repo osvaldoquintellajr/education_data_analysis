@@ -211,8 +211,33 @@ After formatting the variables, let's make some exploratory data analysis.
 First, let's take a look at the number of school enrollment at basic education.
 
 ```{r número de matrículas por ano, echo=FALSE , message=FALSE, warning=FALSE}
-censo.escolar  %>% na.omit() %>% group_by(Ano) %>% summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 'Número de matrículas no Ensino Fundamental_Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 'Número de matrículas no Ensino Fundamental_Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 'Número de matrículas no Ensino Médio' = sum(Número_Matrículas_Ensino_Médio))
+censo.escolar  %>% na.omit() %>% group_by(Ano) %>% summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 'Número de matrículas no Ensino Fundamental_Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 'Número de matrículas no Ensino Fundamental_Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 'Número de matrículas no Ensino Médio' = sum(Número_Matrículas_Ensino_Médio)) 
 ```
+
+Let's use a graph to better visualize this data.
+
+```{r gráfico número de matrículas por ano, echo=FALSE , message=FALSE, warning=FALSE}
+censo.escolar  %>% 
+  na.omit() %>% 
+  group_by(Ano) %>% 
+  summarize('Matriculas_Ensino_Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 
+            'Matriculas_Ensino_Fundamental_Anos_Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 
+            'Matriculas_Ensino_Fundamental_Anos_Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 
+            'Matriculas_Ensino_Médio' = sum(Número_Matrículas_Ensino_Médio)) %>%
+  pivot_longer("Matriculas_Ensino_Fundamental":"Matriculas_Ensino_Médio", names_to = "matriculas", values_to = "Quantidade_Matrículas") %>%
+  ggplot(aes(x = Ano, y = Quantidade_Matrículas, color = matriculas)) + 
+  geom_line() + 
+  ggtitle("Quantidade de matrículas por nível de ensino") +
+  theme(text = element_text(family = "serif", size= 11),
+        axis.text = element_text(size = 11),
+        axis.title.y = element_text("Quantidade de Matrículas"),
+        axis.text.x = element_text(angle = 90)) +
+  scale_x_continuous(breaks = seq(from = 2010, to = 2021, by = 1))
+
+
+```
+
+
 
 Now, the enrollment at basic education separated by location of school. 
 
