@@ -11,6 +11,7 @@ github_repo: https://github.com/osvaldoquintellajr/educational_data_analysis
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(fig.align = 'center')
+options(scipen=999)
 ```
 
 ### Exploratory Data Analysis of Censo Escolar
@@ -47,7 +48,9 @@ variables <- c('NU_ANO_CENSO', 'NO_REGIAO', 'CO_REGIAO',
                                  'QT_MAT_BAS_D', 'QT_MAT_BAS_N', 'QT_MAT_BAS_EAD',
                                  'IN_FUND', 'IN_FUND_AI', 'IN_FUND_AF', 'IN_MED',
                                  'QT_MAT_FUND', 'QT_MAT_FUND_AI', 'QT_MAT_FUND_AF',
-                                 'QT_MAT_MED')
+                                 'QT_MAT_MED', 'QT_MAT_EJA_MED', 'QT_MAT_FUND_INT', 
+                                 'QT_MAT_FUND_AI_INT', 'QT_MAT_FUND_AF_INT', 
+                                 'QT_MAT_MED_INT')
 
 file.2022 <- '~/Documentos/microdados/censo escolar/microdados_ed_basica_2022/Dados/microdados_ed_basica_2022.csv'
 
@@ -102,11 +105,12 @@ censo.escolar.2011 <- read.data(2011, file.2011, variables)
 censo.escolar.2010 <- read.data(2010, file.2010, variables)
 ```
 
+Now, let's bind all this data.frame in only one data.frame called `censo.escolar`.
+
 I've saved the data as censo_escolar.Rdata. This file is available on my repo: [repo](https://github.com/osvaldoquintellajr/education_data_analysis)
 
 To read the censo_escolar.Rdata, you can use the following code: \> load("paste_the_file_directory_here")
 
-Let's bind all this data.frame in only one data.frame called `censo.escolar`.
 
 ```{r bind data.frames, echo=FALSE}
 censo.escolar <- rbind(censo.escolar.2010, censo.escolar.2011, censo.escolar.2012, censo.escolar.2013, censo.escolar.2014, censo.escolar.2015, censo.escolar.2016, censo.escolar.2017, censo.escolar.2018, censo.escolar.2019, censo.escolar.2020, censo.escolar.2021, censo.escolar.2022)
@@ -159,8 +163,13 @@ censo.escolar <-censo.escolar %>%
     'Número_Matrículas_Ensino_Fundamental' = 'QT_MAT_FUND', 
     'Número_Matrículas_Ensino_Fundamental_Anos_Iniciais' = 'QT_MAT_FUND_AI', 
     'Número_Matrículas_Ensino_Fundamental_Anos_Finais' = 'QT_MAT_FUND_AF',
-    'Número_Matrículas_Ensino_Médio' = 'QT_MAT_MED'
-  )
+    'Número_Matrículas_Ensino_Médio' = 'QT_MAT_MED',
+    'Número_Matrículas_Ensino_Médio_EJA' = 'QT_MAT_EJA_MED',
+    'Número_Matrículas_Ensino_Fundamental_integral' = 'QT_MAT_FUND_INT', 
+    'Número_Matrículas_Ensino_Fundamental_Anos_Iniciais_integral' = 'QT_MAT_FUND_AI_INT',
+    'Número_Matrículas_Ensino_Fundamental_Anos_Finais_integral' = 'QT_MAT_FUND_AF_INT',
+    'Número_Matrículas_Ensino_Médio_Integral' = 'QT_MAT_MED_INT'
+    )
 
 head(censo.escolar, n = 6)
 ```
@@ -211,7 +220,17 @@ After formatting the variables, let's make some exploratory data analysis.
 First, let's take a look at the number of school enrollment at basic education.
 
 ```{r número de matrículas por ano, echo=FALSE , message=FALSE, warning=FALSE}
-censo.escolar  %>% na.omit() %>% group_by(Ano) %>% summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 'Número de matrículas no Ensino Fundamental_Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 'Número de matrículas no Ensino Fundamental_Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 'Número de matrículas no Ensino Médio' = sum(Número_Matrículas_Ensino_Médio)) 
+censo.escolar  %>% 
+  na.omit() %>% 
+  group_by(Ano) %>% 
+  mutate(Número_Matrículas_Ensino_Médio = Número_Matrículas_Ensino_Médio+Número_Matrículas_Ensino_Médio_EJA+Número_Matrículas_Ensino_Médio_Integral,
+         Número_Matrículas_Ensino_Fundamental = Número_Matrículas_Ensino_Fundamental+Número_Matrículas_Ensino_Fundamental_integral,
+         Número_Matrículas_Ensino_Fundamental_Anos_Iniciais = Número_Matrículas_Ensino_Fundamental_Anos_Iniciais+Número_Matrículas_Ensino_Fundamental_Anos_Iniciais_integral,
+         Número_Matrículas_Ensino_Fundamental_Anos_Finais = Número_Matrículas_Ensino_Fundamental_Anos_Finais+Número_Matrículas_Ensino_Fundamental_Anos_Finais_integral) %>%
+  summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 
+            'Número de matrículas no Ensino Fundamental_Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 
+            'Número de matrículas no Ensino Fundamental_Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 
+            'Número de matrículas no Ensino Médio' = sum(Número_Matrículas_Ensino_Médio)) 
 ```
 
 Let's use a graph to better visualize this data.
@@ -220,24 +239,26 @@ Let's use a graph to better visualize this data.
 censo.escolar  %>% 
   na.omit() %>% 
   group_by(Ano) %>% 
-  summarize('Matriculas_Ensino_Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 
-            'Matriculas_Ensino_Fundamental_Anos_Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 
-            'Matriculas_Ensino_Fundamental_Anos_Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 
-            'Matriculas_Ensino_Médio' = sum(Número_Matrículas_Ensino_Médio)) %>%
-  pivot_longer("Matriculas_Ensino_Fundamental":"Matriculas_Ensino_Médio", names_to = "matriculas", values_to = "Quantidade_Matrículas") %>%
-  ggplot(aes(x = Ano, y = Quantidade_Matrículas, color = matriculas)) + 
+  summarize('Ensino_Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 
+            'Ensino_Fundamental_Anos_Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 
+            'Ensino_Fundamental_Anos_Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 
+            'Ensino_Médio' = sum(Número_Matrículas_Ensino_Médio)) %>%
+  pivot_longer("Ensino_Fundamental":"Ensino_Médio", names_to = "Nível de Ensino", values_to = "Quantidade_Matrículas") %>%
+  ggplot(aes(x = Ano, y = Quantidade_Matrículas, color = `Nível de Ensino`)) + 
   geom_line() + 
   ggtitle("Quantidade de matrículas por nível de ensino") +
   theme(text = element_text(family = "serif", size= 11),
         axis.text = element_text(size = 11),
         axis.title.y = element_text("Quantidade de Matrículas"),
         axis.text.x = element_text(angle = 90)) +
-  scale_x_continuous(breaks = seq(from = 2010, to = 2021, by = 1))
+  scale_x_continuous(breaks = seq(from = 2010, to = 2021, by = 1)) 
 
 
 ```
 
+Actually, there is something wrong with this graph. The official government's webpage inform us that the number of enrollment at high school are 6.6 millions of students.
 
+<https://www.gov.br/inep/pt-br/assuntos/noticias/censo-escolar/inep-divulga-dados-da-1a-etapa-do-censo-escolar-2021>
 
 Now, the enrollment at basic education separated by location of school. 
 
