@@ -10,3 +10,5 @@ In this project I will:
   - some inference from data;
   - econometric analysis. 
 
+The result of this exercise can be visualized at the following webpage:
+<https://osvaldoquintellajr.github.io/educational_data_analysis/>
