@@ -269,13 +269,19 @@ censo.escolar %>% group_by(Ano, Localização) %>% summarize('Número de matríc
 ```{r Porcentagem de escolas que têm acesso a internet,  echo=FALSE}
 censo.escolar%>% group_by(Ano, Dependência_Administrativa) %>% summarize('Proporção de escolas com acesso à internet' = mean(Internet_Banda_Larga == 'Sim')) 
 ```
+
 The next table shows the proportion of schools with fast internet connection.  
 
 ```{r porcentagem de escolas com acesso a internet por localização da escola, echo=FALSE, message=FALSE, warning=FALSE}
 censo.escolar %>% group_by(Ano, Localização) %>% summarize('Proporção de escolas com acesso à internet' = mean(Internet_Banda_Larga == 'Sim')) %>% ungroup() %>% pivot_wider(names_from = Localização, values_from = 'Proporção de escolas com acesso à internet') %>% na.omit() %>% rename('Proporção de escolas com acesso à internet_Rural' = 'Rural', 'Proporção de escolas com acesso à internet_Urbana' = 'Urbana')
 ```
-The graph bellow shows the proportion of schools with fast internet connection.
+
+The graph bellow shows the proportion of schools with fast internet connection by location.
 
 ```{r gráfico da proporção de escolas com conexão banda larga, echo=FALSE}
 censo.escolar %>% group_by(Ano, Localização) %>% summarize('Proporção_escolas_acesso_internet' = mean(Internet_Banda_Larga == 'Sim')) %>% ungroup() %>% ggplot(aes(x = Ano, y = Proporção_escolas_acesso_internet)) + geom_ribbon(aes(ymax = Proporção_escolas_acesso_internet, ymin = 0,  fill = Localização), alpha =0.2) + theme_wsj() + scale_x_continuous(limits = c(2010, 2021), breaks = seq(2010,2022,by =1)) +theme(text = element_text(family = 'serif', size =11)) + geom_text(aes(label = round(Proporção_escolas_acesso_internet,2)), size = 3, color = 'black')
 ```
+
+
+### Exploratory Data Analysis of SAEB
+
