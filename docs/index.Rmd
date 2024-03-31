@@ -393,14 +393,16 @@ censo.escolar %>%
 ```
 
 
-#### Tablets vailables to students.
+#### Desktops vailables to students.
 
 
 ```{r tablets, echo=FALSE, message=FALSE, warning=FALSE}
-censo.escolar %>% na.omit() %>%
-  group_by(Dependência_Administrativa) %>% summarise('Quantidade_tablets_disponíveis' = sum(Quantidade_computadores_em_uso_pelos_alunos_desktop))
+censo.escolar %>%
+  group_by(Ano,Dependência_Administrativa) %>% 
+  summarise('Quantidade_desktops_disponíveis' = sum(Quantidade_computadores_em_uso_pelos_alunos_desktop, na.rm = TRUE))
 ```
-This dataset has information about the number of tablets available to students. Let's explore this information.
+
+The table above has information about the number of desktops available to students. Let's explore this information.
 
 ### Exploratory Data Analysis of SAEB
 
