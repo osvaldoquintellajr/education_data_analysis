@@ -244,10 +244,15 @@ censo.escolar  %>%
   ggplot(aes(x = Ano, y = Quantidade_Matrículas, color = `Nível de Ensino`)) + 
   geom_line() + 
   ggtitle("Quantidade de matrículas por nível de ensino") +
-  theme(text = element_text(family = "serif", size= 11),
+  theme_wsj() +
+  theme(text = element_text(family = "serif"),
         axis.text = element_text(size = 11),
-        axis.title.y = element_text("Quantidade de Matrículas"),
-        axis.text.x = element_text(angle = 90)) +
+        axis.title.y = element_text("Quantidade de Matrículas", size = 11),
+        axis.title.x = element_text("Ano", size = 11),
+        axis.text.x = element_text(angle = 90),
+        title = element_text(size = 11),
+        legend.title = element_blank(),
+        legend.text.position = "top" ) +
   scale_x_continuous(breaks = seq(from = 2010, to = 2022, by = 1)) +
   scale_y_continuous(breaks = seq(from = 4000000, to = 35000000, by = 4000000))
 ```
@@ -263,11 +268,47 @@ censo.escolar %>% group_by(Ano, Localização) %>% summarize('Número de matríc
 
 
 
+```{r gráfico número de matrículas por ano e Localização_Ensino_Fundamental, echo=FALSE, message=FALSE, warning=FALSE}
+censo.escolar %>% 
+  filter(Situação_funcionamento != "Extinta") %>%
+  ggplot(aes(x = Localização, color = Número_Matrículas_Ensino_Fundamental)) + 
+  geom_bar() +
+  facet_grid(~Ano) +
+  theme_wsj() + 
+  ggtitle("Quantidade de matrículas por localização_Ensino Fundamental") +
+  theme(axis.text.x.bottom = element_text(angle = 90),
+        text = element_text(family = 'serif', size = 11),
+        axis.title.y = element_text("Quantidade de matrículas", size = 11 ),
+        axis.title.x = element_text("Localização", size = 11),
+        title = element_text(size = 9))
+```
+
+The graph above allows to conclude that the number of enrollments at elementary school
+is falling at rural areas and is growing at urban areas 
+
+The same happens to the number of enrollments at high school as we can see at the graph bellow.
+
+```{r gráfico número de matrículas por ano e Localização_Ensino_Médio, echo=FALSE, message=FALSE, warning=FALSE}
+censo.escolar %>% 
+  filter(Situação_funcionamento != "Extinta") %>%
+  ggplot(aes(x = Localização, color = Número_Matrículas_Ensino_Médio)) + 
+  geom_bar() +
+  facet_grid(~Ano) +
+  theme_wsj() + 
+  ggtitle("Quantidade de matrículas por localização_Ensino Médio") +
+  theme(axis.text.x.bottom = element_text(angle = 90),
+        text = element_text(family = 'serif', size = 11),
+        axis.title.y = element_text("Quantidade de matrículas", size = 11 ),
+        axis.title.x = element_text("Localização", size = 11),
+        title = element_text(size = 9))
+```
 #### Proportion of school enrollment with fast internet connection.
 
 
 ```{r Porcentagem de escolas que têm acesso a internet,  echo=FALSE}
-censo.escolar%>% group_by(Ano, Dependência_Administrativa) %>% summarize('Proporção de escolas com acesso à internet' = mean(Internet_Banda_Larga == 'Sim')) 
+censo.escolar %>% 
+  group_by(Ano, Dependência_Administrativa) %>% 
+  summarize('Proporção de escolas com acesso à internet' = mean(Internet_Banda_Larga == 'Sim')) 
 ```
 
 
@@ -276,13 +317,26 @@ censo.escolar%>% group_by(Ano, Dependência_Administrativa) %>% summarize('Propo
 The next table shows the proportion of schools with fast internet connection.  
 
 ```{r porcentagem de escolas com acesso a internet por localização da escola, echo=FALSE, message=FALSE, warning=FALSE}
-censo.escolar %>% group_by(Ano, Localização) %>% summarize('Proporção de escolas com acesso à internet' = mean(Internet_Banda_Larga == 'Sim')) %>% ungroup() %>% pivot_wider(names_from = Localização, values_from = 'Proporção de escolas com acesso à internet') %>% na.omit() %>% rename('Proporção de escolas com acesso à internet_Rural' = 'Rural', 'Proporção de escolas com acesso à internet_Urbana' = 'Urbana')
+censo.escolar %>% 
+  group_by(Ano, Localização) %>% 
+  summarize('Proporção de escolas com acesso à internet' = mean(Internet_Banda_Larga == 'Sim')) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = Localização, values_from = 'Proporção de escolas com acesso à internet') %>% 
+  rename('Proporção de escolas com acesso à internet_Rural' = 'Rural', 'Proporção de escolas com acesso à internet_Urbana' = 'Urbana')
 ```
 
 The graph bellow shows the proportion of schools with fast internet connection by location.
 
-```{r gráfico da proporção de escolas com conexão banda larga, echo=FALSE}
-censo.escolar %>% group_by(Ano, Localização) %>% summarize('Proporção_escolas_acesso_internet' = mean(Internet_Banda_Larga == 'Sim')) %>% ungroup() %>% ggplot(aes(x = Ano, y = Proporção_escolas_acesso_internet)) + geom_ribbon(aes(ymax = Proporção_escolas_acesso_internet, ymin = 0,  fill = Localização), alpha =0.2) + theme_wsj() + scale_x_continuous(limits = c(2010, 2021), breaks = seq(2010,2022,by =1)) +theme(text = element_text(family = 'serif', size =11)) + geom_text(aes(label = round(Proporção_escolas_acesso_internet,2)), size = 3, color = 'black')
+```{r gráfico da proporção de escolas com conexão banda larga, echo=FALSE, warning=FALSE}
+censo.escolar %>% 
+  group_by(Ano, Localização) %>% 
+  summarize('Proporção_escolas_acesso_internet' = mean(Internet_Banda_Larga == 'Sim')) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = Ano, y = Proporção_escolas_acesso_internet)) + 
+  geom_ribbon(aes(ymax = Proporção_escolas_acesso_internet, ymin = 0,  fill = Localização), alpha =0.2) + 
+  theme_wsj() + scale_x_continuous(limits = c(2010, 2021), breaks = seq(2010,2022,by =1)) +
+  theme(text = element_text(family = 'serif', size =11)) + 
+  geom_text(aes(label = round(Proporção_escolas_acesso_internet,2)), size = 3, color = 'black')
 ```
 
 
