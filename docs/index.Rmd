@@ -190,23 +190,49 @@ Let's change the format of variables that should be factors. In R, factors are u
 
 ```{r formating categorical variables, include=FALSE}
 censo.escolar <- censo.escolar %>% mutate(
-  Nome_região_geográfica = as_factor(if_else(Nome_região_geográfica == 'Norte', 'Norte', if_else(Nome_região_geográfica == 'Sul', 'Sul', if_else(Nome_região_geográfica == 'Sudeste', 'Sudeste', if_else(Nome_região_geográfica == 'Nordeste', 'Nordeste', if_else(Nome_região_geográfica == 'Centro_Oeste', 'Centro_Oeste', NA)))))),
-  Dependência_Administrativa = as_factor(if_else(Dependência_Administrativa == 1, 'Federal', if_else(Dependência_Administrativa == 2, 'Estadual', if_else(Dependência_Administrativa == 3, 'Municipal', if_else(Dependência_Administrativa == 4, 'Privada', NA))))),
-  Categoria_escola_privada = as_factor(if_else(Categoria_escola_privada == 1, 'Particular', if_else(Categoria_escola_privada == 2, 'Comunitária', if_else(Categoria_escola_privada == 3, 'Confessional', if_else(Categoria_escola_privada == 4, 'Filantrópica', NA))))),
-  Localização = as_factor(if_else(Localização == 1, 'Urbana', if_else(Localização == 2, 'Rural', NA))),
-  Situação_funcionamento = as_factor(if_else(Situação_funcionamento == 1, 'Em_atividade', if_else(Situação_funcionamento == 2, 'Paralisada', if_else(Situação_funcionamento == 3, 'Extinta', if_else(Situação_funcionamento == 4, 'Extinta_em_anos_anteriores', NA))))),
-  Computadores_em_uso_pelos_alunos_desktop = as_factor(if_else(Computadores_em_uso_pelos_alunos_desktop == 1, 'Sim', if_else(Computadores_em_uso_pelos_alunos_desktop == 0, 'Não', NA))),
-  Computadores_em_uso_pelos_alunos_portátil = as_factor(if_else(Computadores_em_uso_pelos_alunos_portátil == 1, 'Sim',  if_else(Computadores_em_uso_pelos_alunos_portátil == 0, 'Não', NA))),
-  Computadores_em_uso_pelos_alunos_tablet = as_factor(if_else(Computadores_em_uso_pelos_alunos_tablet == 1, 'Sim',  if_else(Computadores_em_uso_pelos_alunos_tablet == 0, 'Não', NA))),
-  Acesso_Internet = as_factor(if_else(Acesso_Internet == 1, 'Sim', if_else(Acesso_Internet == 0, 'Não', NA))),
-  Acesso_Internet_alunos = as_factor(if_else(Acesso_Internet_alunos == 1, 'Sim',  if_else(Acesso_Internet_alunos == 0, 'Não', NA))),
-  Acesso_Internet_processos_de_ensino_aprendizagem = as_factor(if_else(Acesso_Internet_processos_de_ensino_aprendizagem == 1, 'Sim', if_else(Acesso_Internet_processos_de_ensino_aprendizagem == 0, 'Não', NA))),
-  Acesso_Internet_Para_comunidade = as_factor(if_else(Acesso_Internet_Para_comunidade == 1, 'Sim', if_else(Acesso_Internet_Para_comunidade == 0, 'Não', NA))),
-  Internet_Banda_Larga = as_factor(if_else(Internet_Banda_Larga == 1, 'Sim', if_else(Internet_Banda_Larga == 0,  'Não', NA))),
-  Ensino_Fundamental_Possui_matrículas = as_factor(if_else(Ensino_Fundamental_Possui_matrículas == 1, 'Sim', if_else(Ensino_Fundamental_Possui_matrículas == 0, 'Não', NA))),
-  Ensino_Fundamental_Anos_Iniciais_Possui_matrículas = as_factor(if_else(Ensino_Fundamental_Anos_Iniciais_Possui_matrículas == 1, 'Sim', if_else(Ensino_Fundamental_Anos_Iniciais_Possui_matrículas == 0, 'Não', NA))),
-  Ensino_Fundamental_Anos_Finais_Possui_matrículas = as_factor(if_else(Ensino_Fundamental_Anos_Finais_Possui_matrículas == 1, 'Sim', if_else(Ensino_Fundamental_Anos_Finais_Possui_matrículas == 0, 'Não', NA))),
-  Ensino_Médio_Possui_matrículas = as_factor(if_else(Ensino_Médio_Possui_matrículas == 1, 'Sim', if_else(Ensino_Médio_Possui_matrículas == 0, 'Não', NA))))
+  Nome_região_geográfica = as_factor(if_else(Nome_região_geográfica == 'Norte', 'Norte', 
+                                             if_else(Nome_região_geográfica == 'Sul', 'Sul', 
+                                                     if_else(Nome_região_geográfica == 'Sudeste', 'Sudeste', 
+                                                             if_else(Nome_região_geográfica == 'Nordeste', 'Nordeste', 
+                                                                     if_else(Nome_região_geográfica == 'Centro_Oeste', 'Centro_Oeste', NA)))))),
+  Dependência_Administrativa = as_factor(if_else(Dependência_Administrativa == 1, 'Federal', 
+                                                 if_else(Dependência_Administrativa == 2, 'Estadual', 
+                                                         if_else(Dependência_Administrativa == 3, 'Municipal', 
+                                                                 if_else(Dependência_Administrativa == 4, 'Privada', NA))))),
+  Categoria_escola_privada = as_factor(if_else(Categoria_escola_privada == 1, 'Particular', 
+                                               if_else(Categoria_escola_privada == 2, 'Comunitária', 
+                                                       if_else(Categoria_escola_privada == 3, 'Confessional', 
+                                                               if_else(Categoria_escola_privada == 4, 'Filantrópica', NA))))),
+  Localização = as_factor(if_else(Localização == 1, 'Urbana', 
+                                  if_else(Localização == 2, 'Rural', NA))),
+  Situação_funcionamento = as_factor(if_else(Situação_funcionamento == 1, 'Em_atividade', 
+                                             if_else(Situação_funcionamento == 2, 'Paralisada', 
+                                                     if_else(Situação_funcionamento == 3, 'Extinta', 
+                                                             if_else(Situação_funcionamento == 4, 'Extinta_em_anos_anteriores', NA))))),
+  Computadores_em_uso_pelos_alunos_desktop = as_factor(if_else(Computadores_em_uso_pelos_alunos_desktop == 1, 'Sim',
+                                                               if_else(Computadores_em_uso_pelos_alunos_desktop == 0, 'Não', NA))),
+  Computadores_em_uso_pelos_alunos_portátil = as_factor(if_else(Computadores_em_uso_pelos_alunos_portátil == 1, 'Sim', 
+                                                                if_else(Computadores_em_uso_pelos_alunos_portátil == 0, 'Não', NA))),
+  Computadores_em_uso_pelos_alunos_tablet = as_factor(if_else(Computadores_em_uso_pelos_alunos_tablet == 1, 'Sim', 
+                                                              if_else(Computadores_em_uso_pelos_alunos_tablet == 0, 'Não', NA))),
+  Acesso_Internet = as_factor(if_else(Acesso_Internet == 1, 'Sim', 
+                                      if_else(Acesso_Internet == 0, 'Não', NA))),
+  Acesso_Internet_alunos = as_factor(if_else(Acesso_Internet_alunos == 1, 'Sim',  
+                                             if_else(Acesso_Internet_alunos == 0, 'Não', NA))),
+  Acesso_Internet_processos_de_ensino_aprendizagem = as_factor(if_else(Acesso_Internet_processos_de_ensino_aprendizagem == 1, 'Sim', 
+                                                                       if_else(Acesso_Internet_processos_de_ensino_aprendizagem == 0, 'Não', NA))),
+  Acesso_Internet_Para_comunidade = as_factor(if_else(Acesso_Internet_Para_comunidade == 1, 'Sim', 
+                                                      if_else(Acesso_Internet_Para_comunidade == 0, 'Não', NA))),
+  Internet_Banda_Larga = as_factor(if_else(Internet_Banda_Larga == 1, 'Sim', 
+                                           if_else(Internet_Banda_Larga == 0,  'Não', NA))),
+  Ensino_Fundamental_Possui_matrículas = as_factor(if_else(Ensino_Fundamental_Possui_matrículas == 1, 'Sim', 
+                                                           if_else(Ensino_Fundamental_Possui_matrículas == 0, 'Não', NA))),
+  Ensino_Fundamental_Anos_Iniciais_Possui_matrículas = as_factor(if_else(Ensino_Fundamental_Anos_Iniciais_Possui_matrículas == 1, 'Sim', 
+                                                                         if_else(Ensino_Fundamental_Anos_Iniciais_Possui_matrículas == 0, 'Não', NA))),
+  Ensino_Fundamental_Anos_Finais_Possui_matrículas = as_factor(if_else(Ensino_Fundamental_Anos_Finais_Possui_matrículas == 1, 'Sim', 
+                                                                       if_else(Ensino_Fundamental_Anos_Finais_Possui_matrículas == 0, 'Não', NA))),
+  Ensino_Médio_Possui_matrículas = as_factor(if_else(Ensino_Médio_Possui_matrículas == 1, 'Sim', 
+                                                     if_else(Ensino_Médio_Possui_matrículas == 0, 'Não', NA))))
 
 ```
 
@@ -225,10 +251,10 @@ First, let's take a look at the number of school enrollment at basic education.
 ```{r número de matrículas por ano, echo=FALSE , message=FALSE, warning=FALSE}
 censo.escolar  %>% 
   group_by(Ano)  %>%
-  summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 
-            'Número de matrículas no Ensino Fundamental_Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 
-            'Número de matrículas no Ensino Fundamental_Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 
-            'Número de matrículas no Ensino Médio' = sum(Número_Matrículas_Ensino_Médio)) 
+  summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental, na.rm = TRUE), 
+            'Número de matrículas no Ensino Fundamental_Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais, na.rm = TRUE), 
+            'Número de matrículas no Ensino Fundamental_Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais, na.rm = TRUE), 
+            'Número de matrículas no Ensino Médio' = sum(Número_Matrículas_Ensino_Médio, na.rm = TRUE)) 
 ```
 
 Let's use a graph to better visualize this data.
@@ -236,10 +262,10 @@ Let's use a graph to better visualize this data.
 ```{r gráfico número de matrículas por ano, echo=FALSE , message=FALSE, warning=FALSE}
 censo.escolar  %>% 
   group_by(Ano) %>% 
-  summarize('Ensino_Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 
-            'Ensino_Fundamental_Anos_Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 
-            'Ensino_Fundamental_Anos_Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 
-            'Ensino_Médio' = sum(Número_Matrículas_Ensino_Médio)) %>%
+  summarize('Ensino_Fundamental' = sum(Número_Matrículas_Ensino_Fundamental, na.rm = TRUE), 
+            'Ensino_Fundamental_Anos_Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais, na.rm = TRUE), 
+            'Ensino_Fundamental_Anos_Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais, na.rm = TRUE), 
+            'Ensino_Médio' = sum(Número_Matrículas_Ensino_Médio, na.rm = TRUE)) %>%
   pivot_longer("Ensino_Fundamental":"Ensino_Médio", names_to = "Nível de Ensino", values_to = "Quantidade_Matrículas") %>%
   ggplot(aes(x = Ano, y = Quantidade_Matrículas, color = `Nível de Ensino`)) + 
   geom_line() + 
@@ -262,7 +288,12 @@ It is possible to conclude that the number of enrollment at basic education is f
 Now, the enrollment at basic education separated by location of school. 
 
 ```{r número de matrículas por ano e Localização, echo=FALSE, message=FALSE, warning=FALSE}
-censo.escolar %>% group_by(Ano, Localização) %>% summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 'Número de matrículas no Ensino Fundamental Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 'Número de matrículas no Ensino Fundamental Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 'Número de matrículas Ensino Médio' = sum(Número_Matrículas_Ensino_Médio)) %>% pivot_wider(names_from = Localização, values_from = 'Número de matrículas no Ensino Fundamental':'Número de matrículas Ensino Médio')
+censo.escolar %>% group_by(Ano, Localização) %>% 
+  summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental, na.rm = TRUE), 
+            'Número de matrículas no Ensino Fundamental Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais, na.rm = TRUE), 
+            'Número de matrículas no Ensino Fundamental Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais, na.rm = TRUE), 
+            'Número de matrículas Ensino Médio' = sum(Número_Matrículas_Ensino_Médio, na.rm = TRUE)) %>% 
+  pivot_wider(names_from = Localização, values_from = 'Número de matrículas no Ensino Fundamental':'Número de matrículas Ensino Médio')
 ```
 
 
@@ -302,17 +333,32 @@ censo.escolar %>%
         axis.title.x = element_text("Localização", size = 11),
         title = element_text(size = 9))
 ```
-#### Proportion of school enrollment with fast internet connection.
 
 
-```{r Porcentagem de escolas que têm acesso a internet,  echo=FALSE}
+#### Proportion of school with fast internet connection.
+
+Now, let's visualize a table of the proportion of school with fast internet connection.
+
+```{r Porcentagem de escolas que têm acesso a internet,  echo=FALSE, warning=FALSE, message=FALSE}
 censo.escolar %>% 
   group_by(Ano, Dependência_Administrativa) %>% 
   summarize('Proporção de escolas com acesso à internet' = mean(Internet_Banda_Larga == 'Sim')) 
 ```
 
+Now, a graph to better visualization.
 
-
+```{r proporção de escolas com conexão rápida com a internet por dependência administrativa, echo = FALSE, warning = FALSE}
+censo.escolar %>%
+filter(Situação_funcionamento != "Extinta") %>%
+  ggplot(aes(x = Dependência_Administrativa, fill = Internet_Banda_Larga)) +
+  geom_bar() +
+  theme_wsj() +
+  facet_grid(~Ano) + 
+  ggtitle("Quantidade de escolas com internet banda larga") + 
+  theme(axis.text.x.bottom = element_text(angle = 90, size = 7),
+        title = element_text(size = 11),
+        legend.title = element_blank())
+``` 
 
 The next table shows the proportion of schools with fast internet connection.  
 
@@ -327,15 +373,22 @@ censo.escolar %>%
 
 The graph bellow shows the proportion of schools with fast internet connection by location.
 
-```{r gráfico da proporção de escolas com conexão banda larga, echo=FALSE, warning=FALSE}
+```{r gráfico da proporção de escolas com conexão banda larga, echo = FALSE, warning = FALSE}
 censo.escolar %>% 
   group_by(Ano, Localização) %>% 
   summarize('Proporção_escolas_acesso_internet' = mean(Internet_Banda_Larga == 'Sim')) %>% 
   ungroup() %>% 
   ggplot(aes(x = Ano, y = Proporção_escolas_acesso_internet)) + 
-  geom_ribbon(aes(ymax = Proporção_escolas_acesso_internet, ymin = 0,  fill = Localização), alpha =0.2) + 
-  theme_wsj() + scale_x_continuous(limits = c(2010, 2021), breaks = seq(2010,2022,by =1)) +
-  theme(text = element_text(family = 'serif', size =11)) + 
+  geom_ribbon(aes(ymax = Proporção_escolas_acesso_internet, ymin = 0,  color = Localização), alpha = 0.2) + 
+  theme_wsj() + 
+  ggtitle("Proporção de escolas com rede de internet banda larga") + 
+  scale_x_continuous(limits = c(2010, 2021), breaks = seq(2010,2022,by =1)) +
+  ylab("Proporção")+
+  theme(text = element_text(family = 'serif', size =11),
+        title = element_text(size = 11),
+        legend.title = element_blank(),
+        axis.title.x = element_text("Ano", size = 11),
+        axis.title.y = element_text("Proporção", size = 11)) +
   geom_text(aes(label = round(Proporção_escolas_acesso_internet,2)), size = 3, color = 'black')
 ```
 
