@@ -14,7 +14,7 @@ knitr::opts_chunk$set(fig.align = 'center')
 options(scipen=999)
 ```
 
-### Exploratory Data Analysis of Censo Escolar
+## Exploratory Data Analysis of Censo Escolar
 
 The following code load the necessary packages.
 
@@ -216,17 +216,15 @@ Now, it is possible to see that we have the correct format of categorical variab
 glimpse(censo.escolar)
 ```
 
+#### Number of school enrollment at basic education.
+
+
 After formatting the variables, let's make some exploratory data analysis.
 First, let's take a look at the number of school enrollment at basic education.
 
 ```{r número de matrículas por ano, echo=FALSE , message=FALSE, warning=FALSE}
 censo.escolar  %>% 
-  na.omit() %>% 
-  group_by(Ano) %>% 
-  mutate(Número_Matrículas_Ensino_Médio = Número_Matrículas_Ensino_Médio+Número_Matrículas_Ensino_Médio_EJA+Número_Matrículas_Ensino_Médio_Integral,
-         Número_Matrículas_Ensino_Fundamental = Número_Matrículas_Ensino_Fundamental+Número_Matrículas_Ensino_Fundamental_integral,
-         Número_Matrículas_Ensino_Fundamental_Anos_Iniciais = Número_Matrículas_Ensino_Fundamental_Anos_Iniciais+Número_Matrículas_Ensino_Fundamental_Anos_Iniciais_integral,
-         Número_Matrículas_Ensino_Fundamental_Anos_Finais = Número_Matrículas_Ensino_Fundamental_Anos_Finais+Número_Matrículas_Ensino_Fundamental_Anos_Finais_integral) %>%
+  group_by(Ano)  %>%
   summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 
             'Número de matrículas no Ensino Fundamental_Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 
             'Número de matrículas no Ensino Fundamental_Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 
@@ -237,7 +235,6 @@ Let's use a graph to better visualize this data.
 
 ```{r gráfico número de matrículas por ano, echo=FALSE , message=FALSE, warning=FALSE}
 censo.escolar  %>% 
-  na.omit() %>% 
   group_by(Ano) %>% 
   summarize('Ensino_Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 
             'Ensino_Fundamental_Anos_Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 
@@ -251,14 +248,11 @@ censo.escolar  %>%
         axis.text = element_text(size = 11),
         axis.title.y = element_text("Quantidade de Matrículas"),
         axis.text.x = element_text(angle = 90)) +
-  scale_x_continuous(breaks = seq(from = 2010, to = 2021, by = 1)) 
-
-
+  scale_x_continuous(breaks = seq(from = 2010, to = 2022, by = 1)) +
+  scale_y_continuous(breaks = seq(from = 4000000, to = 35000000, by = 4000000))
 ```
 
-Actually, there is something wrong with this graph. The official government's webpage inform us that the number of enrollment at high school are 6.6 millions of students.
-
-<https://www.gov.br/inep/pt-br/assuntos/noticias/censo-escolar/inep-divulga-dados-da-1a-etapa-do-censo-escolar-2021>
+It is possible to conclude that the number of enrollment at basic education is falling. 
 
 Now, the enrollment at basic education separated by location of school. 
 
@@ -266,9 +260,18 @@ Now, the enrollment at basic education separated by location of school.
 censo.escolar %>% group_by(Ano, Localização) %>% summarize('Número de matrículas no Ensino Fundamental' = sum(Número_Matrículas_Ensino_Fundamental), 'Número de matrículas no Ensino Fundamental Anos Iniciais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Iniciais), 'Número de matrículas no Ensino Fundamental Anos Finais' = sum(Número_Matrículas_Ensino_Fundamental_Anos_Finais), 'Número de matrículas Ensino Médio' = sum(Número_Matrículas_Ensino_Médio)) %>% pivot_wider(names_from = Localização, values_from = 'Número de matrículas no Ensino Fundamental':'Número de matrículas Ensino Médio')
 ```
 
+
+
+
+#### Proportion of school enrollment with fast internet connection.
+
+
 ```{r Porcentagem de escolas que têm acesso a internet,  echo=FALSE}
 censo.escolar%>% group_by(Ano, Dependência_Administrativa) %>% summarize('Proporção de escolas com acesso à internet' = mean(Internet_Banda_Larga == 'Sim')) 
 ```
+
+
+
 
 The next table shows the proportion of schools with fast internet connection.  
 
@@ -282,6 +285,15 @@ The graph bellow shows the proportion of schools with fast internet connection b
 censo.escolar %>% group_by(Ano, Localização) %>% summarize('Proporção_escolas_acesso_internet' = mean(Internet_Banda_Larga == 'Sim')) %>% ungroup() %>% ggplot(aes(x = Ano, y = Proporção_escolas_acesso_internet)) + geom_ribbon(aes(ymax = Proporção_escolas_acesso_internet, ymin = 0,  fill = Localização), alpha =0.2) + theme_wsj() + scale_x_continuous(limits = c(2010, 2021), breaks = seq(2010,2022,by =1)) +theme(text = element_text(family = 'serif', size =11)) + geom_text(aes(label = round(Proporção_escolas_acesso_internet,2)), size = 3, color = 'black')
 ```
 
+
+#### Tablets vailables to students.
+
+
+```{r tablets, echo=FALSE, message=FALSE, warning=FALSE}
+censo.escolar %>% na.omit() %>%
+  group_by(Dependência_Administrativa) %>% summarise('Quantidade_tablets_disponíveis' = sum(Quantidade_computadores_em_uso_pelos_alunos_desktop))
+```
+This dataset has information about the number of tablets available to students. Let's explore this information.
 
 ### Exploratory Data Analysis of SAEB
 
