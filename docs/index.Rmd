@@ -393,7 +393,7 @@ censo.escolar %>%
 ```
 
 
-#### Tablets vailables to students
+#### Tablets vailables to students.
 
 
 ```{r tablets, echo=FALSE, message=FALSE, warning=FALSE}
