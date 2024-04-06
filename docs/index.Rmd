@@ -37,14 +37,8 @@ read.data <- function(year, file, variables){
 variables <- c('NU_ANO_CENSO', 'NO_REGIAO', 'CO_REGIAO',
                                  'CO_UF', 'NO_MUNICIPIO', 'CO_ENTIDADE', 
                                  'TP_DEPENDENCIA', 'TP_LOCALIZACAO', 'TP_CATEGORIA_ESCOLA_PRIVADA',
-                                 'TP_SITUACAO_FUNCIONAMENTO','QT_COMP_ALUNO',
-                                  'IN_DESKTOP_ALUNO', 
-                                 'QT_DESKTOP_ALUNO', 'IN_COMP_PORTATIL_ALUNO',
-                                 'QT_COMP_PORTATIL_ALUNO', 'IN_TABLET_ALUNO', 
-                                  'QT_COMPUTADOR', 'QT_COMP_ADMINISTRATIVO',
-                                 'QT_TABLET_ALUNO', 'IN_INTERNET',
-                                 'IN_INTERNET_ALUNOS', 'IN_INTERNET_APRENDIZAGEM',
-                                 'IN_INTERNET_COMUNIDADE', 'IN_BANDA_LARGA', 
+                                 'TP_SITUACAO_FUNCIONAMENTO', 'IN_INTERNET',
+                                 'IN_INTERNET_ALUNOS', 'IN_BANDA_LARGA', 
                                  'QT_MAT_BAS_D', 'QT_MAT_BAS_N', 'QT_MAT_BAS_EAD',
                                  'IN_FUND', 'IN_FUND_AI', 'IN_FUND_AF', 'IN_MED',
                                  'QT_MAT_FUND', 'QT_MAT_FUND_AI', 'QT_MAT_FUND_AF',
@@ -124,6 +118,13 @@ rm(censo.escolar.2010, censo.escolar.2011, censo.escolar.2012, censo.escolar.201
 rm(file.2010, file.2011, file.2012, file.2013, file.2014, file.2015, file.2016, file.2017, file.2018, file.2019, file.2020, file.2021,file.2022)
 ```
 
+Let's visualize the first lines of the data frame.
+
+```{r visualização das primeiras linhas do data frame censoescolar, echo=FALSE}
+head(censo.escolar, 7)
+```
+
+
 To make data analysis easier, it is good practice to rename the variables. Let's do it.
 
 ```{r rename variables, echo=FALSE}
@@ -139,19 +140,8 @@ censo.escolar <-censo.escolar %>%
     'Categoria_escola_privada' = 'TP_CATEGORIA_ESCOLA_PRIVADA',
     'Localização' = 'TP_LOCALIZACAO', 
     'Situação_funcionamento' = 'TP_SITUACAO_FUNCIONAMENTO', 
-    'Quantidade_computadores_uso_alunos' = 'QT_COMP_ALUNO',
-    'Computadores_em_uso_pelos_alunos_desktop' = 'IN_DESKTOP_ALUNO', 
-    'Quantidade_computadores_em_uso_pelos_alunos_desktop' = 'QT_DESKTOP_ALUNO', 
-    'Computadores_em_uso_pelos_alunos_portátil' = 'IN_COMP_PORTATIL_ALUNO',
-    'Quantidade_computadores_em_uso_pelos_alunos_portátil' = 'QT_COMP_PORTATIL_ALUNO', 
-    'Computadores_em_uso_pelos_alunos_tablet' = 'IN_TABLET_ALUNO', 
-    'Quantidade_computadores_em_uso_pelos_alunos_tablet' = 'QT_TABLET_ALUNO',
-    'Quantidade_computadores_escola' = 'QT_COMPUTADOR',
-    'Quantidade_computadores_uso_administrativo' = 'QT_COMP_ADMINISTRATIVO',
     'Acesso_Internet'= 'IN_INTERNET',
     'Acesso_Internet_alunos' = 'IN_INTERNET_ALUNOS', 
-    'Acesso_Internet_processos_de_ensino_aprendizagem'= 'IN_INTERNET_APRENDIZAGEM',
-    'Acesso_Internet_Para_comunidade' = 'IN_INTERNET_COMUNIDADE', 
     'Internet_Banda_Larga' = 'IN_BANDA_LARGA', 
     'Número_Matrículas_Educação_Básica_Diurno' = 'QT_MAT_BAS_D', 
     'Número_Matrículas_Educação_Básica_Noturno' = 'QT_MAT_BAS_N', 
@@ -175,6 +165,7 @@ head(censo.escolar, n = 6)
 ```
 
 Before analyse the data is interesting to look at the format of all variables.
+It is possible to see that there is 3.017.633 rows and 40 columns.
 
 ```{r cheking the structure of the data_1, echo=FALSE}
 glimpse(censo.escolar)
@@ -209,20 +200,10 @@ censo.escolar <- censo.escolar %>% mutate(
                                              if_else(Situação_funcionamento == 2, 'Paralisada', 
                                                      if_else(Situação_funcionamento == 3, 'Extinta', 
                                                              if_else(Situação_funcionamento == 4, 'Extinta_em_anos_anteriores', NA))))),
-  Computadores_em_uso_pelos_alunos_desktop = as_factor(if_else(Computadores_em_uso_pelos_alunos_desktop == 1, 'Sim',
-                                                               if_else(Computadores_em_uso_pelos_alunos_desktop == 0, 'Não', NA))),
-  Computadores_em_uso_pelos_alunos_portátil = as_factor(if_else(Computadores_em_uso_pelos_alunos_portátil == 1, 'Sim', 
-                                                                if_else(Computadores_em_uso_pelos_alunos_portátil == 0, 'Não', NA))),
-  Computadores_em_uso_pelos_alunos_tablet = as_factor(if_else(Computadores_em_uso_pelos_alunos_tablet == 1, 'Sim', 
-                                                              if_else(Computadores_em_uso_pelos_alunos_tablet == 0, 'Não', NA))),
   Acesso_Internet = as_factor(if_else(Acesso_Internet == 1, 'Sim', 
                                       if_else(Acesso_Internet == 0, 'Não', NA))),
   Acesso_Internet_alunos = as_factor(if_else(Acesso_Internet_alunos == 1, 'Sim',  
                                              if_else(Acesso_Internet_alunos == 0, 'Não', NA))),
-  Acesso_Internet_processos_de_ensino_aprendizagem = as_factor(if_else(Acesso_Internet_processos_de_ensino_aprendizagem == 1, 'Sim', 
-                                                                       if_else(Acesso_Internet_processos_de_ensino_aprendizagem == 0, 'Não', NA))),
-  Acesso_Internet_Para_comunidade = as_factor(if_else(Acesso_Internet_Para_comunidade == 1, 'Sim', 
-                                                      if_else(Acesso_Internet_Para_comunidade == 0, 'Não', NA))),
   Internet_Banda_Larga = as_factor(if_else(Internet_Banda_Larga == 1, 'Sim', 
                                            if_else(Internet_Banda_Larga == 0,  'Não', NA))),
   Ensino_Fundamental_Possui_matrículas = as_factor(if_else(Ensino_Fundamental_Possui_matrículas == 1, 'Sim', 
@@ -392,17 +373,60 @@ censo.escolar %>%
   geom_text(aes(label = round(Proporção_escolas_acesso_internet,2)), size = 3, color = 'black')
 ```
 
+### Exploratory Data Analysis of SAEB
 
-#### Desktops vailables to students.
+Reading data from saeb.2021.5EF and saeb.2021.9EF and select the variables we are going to use.
 
+```{r leitura dos microdados do SAEB_5EF, SAEB_9EF, SAEB_34EM, echo=FALSE, warning=FALSE, message=FALSE}
+variables.saeb <- c()
 
-```{r tablets, echo=FALSE, message=FALSE, warning=FALSE}
-censo.escolar %>%
-  group_by(Ano,Dependência_Administrativa) %>% 
-  summarise('Quantidade_desktops_disponíveis' = sum(Quantidade_computadores_em_uso_pelos_alunos_desktop, na.rm = TRUE))
+saeb.2021.5EF <- read.data("~/Documentos/microdados/SAEB/microdados_saeb_2021_ensino_fundamental_e_medio/DADOS/TS_ALUNO_5EF.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE) 
+
+saeb.2021.5EF <- saeb.2021.5EF %>% select("ID_REGIAO", "ID_AREA", "IN_PUBLICA", 
+                                          "ID_LOCALIZACAO", "PROFICIENCIA_LP_SAEB", 
+                                          "PROFICIENCIA_MT_SAEB", "INSE_ALUNO",
+                                          "NU_TIPO_NIVEL_INSE", "TX_RESP_Q01", 
+                                          "TX_RESP_Q02", "TX_RESP_Q04", 
+                                          "TX_RESP_Q07", "TX_RESP_Q08", "TX_RESP_Q18")
+
+saeb.2021.9EF <- read_delim("/home/junior/Documentos/microdados/SAEB/microdados_saeb_2021_ensino_fundamental_e_medio/DADOS/TS_ALUNO_9EF.csv",
+                            delim = ";", escape_double = FALSE, trim_ws = TRUE, show_col_types = FALSE)
+
+saeb.2021.9EF <- saeb.2021.9EF %>% select("ID_REGIAO", "ID_AREA", "IN_PUBLICA", 
+                                          "ID_LOCALIZACAO", "PROFICIENCIA_LP_SAEB", 
+                                          "PROFICIENCIA_MT_SAEB", "INSE_ALUNO",
+                                          "NU_TIPO_NIVEL_INSE", "TX_RESP_Q01", 
+                                          "TX_RESP_Q02", "TX_RESP_Q04", 
+                                          "TX_RESP_Q07", "TX_RESP_Q08", "TX_RESP_Q18")
 ```
 
-The table above has information about the number of desktops available to students. Let's explore this information.
+Visualizing the first lines of both dataframes.
 
-### Exploratory Data Analysis of SAEB
+```{r visualização das primeiras linhas do dataframe saeb.2021.5EF, echo=FALSE}
+head(saeb.2021.5EF, 7)
+
+```
+
+
+```{r visualização das primeiras linhas do dataframe saeb.2021.9EF, echo=FALSE}
+head(saeb.2021.9EF, 7)
+
+```
+
+Now, it is important to get to know the dataframe. To do this let's use the glimpse function.
+
+```{r conhecendo o data frame saeb.2021.5EF}
+glimpse(saeb.2021.5EF)
+``` 
+
+```{r conhecendo o data frame saeb.2021.9EF} 
+glimpse(saeb.2021.9EF)
+``` 
+
+
+
+```{r formatar variáveis categóricas, echo=FALSE, warning=FALSE, message=FALSE}
+
+```
 
