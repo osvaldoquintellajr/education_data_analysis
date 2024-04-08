@@ -378,10 +378,9 @@ censo.escolar %>%
 Reading data from saeb.2021.5EF and saeb.2021.9EF and select the variables we are going to use.
 
 ```{r leitura dos microdados do SAEB_5EF, SAEB_9EF, SAEB_34EM, echo=FALSE, warning=FALSE, message=FALSE}
-variables.saeb <- c()
 
-saeb.2021.5EF <- read.data("~/Documentos/microdados/SAEB/microdados_saeb_2021_ensino_fundamental_e_medio/DADOS/TS_ALUNO_5EF.csv", 
-    delim = ";", escape_double = FALSE, trim_ws = TRUE) 
+saeb.2021.5EF <- read_delim("~/Documentos/microdados/SAEB/microdados_saeb_2021_ensino_fundamental_e_medio/DADOS/TS_ALUNO_5EF.csv", 
+                            delim = ";", escape_double = FALSE, trim_ws = TRUE) 
 
 saeb.2021.5EF <- saeb.2021.5EF %>% select("ID_REGIAO", "ID_AREA", "IN_PUBLICA", 
                                           "ID_LOCALIZACAO", "PROFICIENCIA_LP_SAEB", 
@@ -405,7 +404,6 @@ Visualizing the first lines of both dataframes.
 
 ```{r visualização das primeiras linhas do dataframe saeb.2021.5EF, echo=FALSE}
 head(saeb.2021.5EF, 7)
-
 ```
 
 
@@ -424,9 +422,250 @@ glimpse(saeb.2021.5EF)
 glimpse(saeb.2021.9EF)
 ``` 
 
+A lot of variables are defined as Characters. Let's format this variables to factors.
+
+```{r formatar variáveis categóricas para análise descritiva saeb.2021.5EF, echo=FALSE}
+saeb.2021.5EF$ID_REGIAO <- factor(saeb.2021.5EF$ID_REGIAO,
+                                  levels = c(1, 2, 3, 4, 5),
+                                  labels = c("Norte", "Nordeste", "Sudeste", "Sul", "Centro-Oeste"))
+
+saeb.2021.5EF$ID_AREA <- factor(saeb.2021.5EF$ID_AREA,
+                                levels = c(1, 2),
+                                labels = c("Capital", "Interior"))
+
+saeb.2021.5EF$IN_PUBLICA <- factor(saeb.2021.5EF$IN_PUBLICA,
+                                   levels = c(0, 1),
+                                   labels = c("Privada", "Pública"))
+
+saeb.2021.5EF$ID_LOCALIZACAO <- factor(saeb.2021.5EF$ID_LOCALIZACAO,
+                                       levels = c(1, 2),
+                                       labels = c("Urbana", "Rural"))
+
+saeb.2021.5EF$TX_RESP_Q01 <- factor(saeb.2021.5EF$TX_RESP_Q01,
+                                    levels = c('*', '.', 'A', 'B'),
+                                    labels = c("Nulo", "Branco", "Masculino", "Feminino"))
+
+saeb.2021.5EF$TX_RESP_Q02 <- factor(saeb.2021.5EF$TX_RESP_Q02,
+                                    levels = c('*', '.', 'A', 'B', 'C', 'D', 'E', 'F'),
+                                    labels = c('Nulo', 'Branco', '9 anos ou menos', '10 anos',
+                                               '11 anos', '12 anos', '13 anos', '14 anos ou mais'))
+
+saeb.2021.5EF$TX_RESP_Q04 <- factor(saeb.2021.5EF$TX_RESP_Q04,
+                                    levels = c('*', '.', 'A', 'B', 'C', 'D', 'E', 'F'),
+                                    labels = c('Nulo', 'Branco', 'Branca', 'Preta', 'Parda',
+                                               'Amarela', 'Indígena', 'Não quero declarar'))
+
+saeb.2021.5EF$TX_RESP_Q07 <- factor (saeb.2021.5EF$TX_RESP_Q07,
+                                     levels = c ('*', '.', 'A', 'B', 'C', 'D', 'E', 'F'),
+                                     labels = c('Nulo', 'Branco', 'Não completou o 5° ano do Ensino Fundamental',
+                                                'Ensino Fundamental, até o 5° ano', 
+                                                'Ensino Fundamental completo',
+                                                'Ensino Médio completo',
+                                                'Ensino Superior completo (faculdade ou graduação)',
+                                                'Não sei'))
+
+saeb.2021.5EF$TX_RESP_Q08 <- factor(saeb.2021.5EF$TX_RESP_Q08,
+                                    levels = c ('*', '.', 'A', 'B', 'C', 'D', 'E', 'F'),
+                                    labels = c('Nulo', 'Branco', 'Não completou o 5° ano do Ensino Fundamental',
+                                               'Ensino Fundamental, até o 5° ano',
+                                               'Ensino Fundamental completo',
+                                               'Ensino Médio completo',
+                                               'Ensino Superior completo (faculdade ou graduação)',
+                                               'Não sei'))
+
+saeb.2021.5EF$TX_RESP_Q18 <- factor(saeb.2021.5EF$TX_RESP_Q18,
+                                    levels = c('*', '.', 'A', 'B', 'C'),
+                                    labels = c('Nulo', 'Branco', 'Não',
+                                               'Sim, uma vez',
+                                               'Sim, duas vezes ou mais'))
+```
 
 
-```{r formatar variáveis categóricas, echo=FALSE, warning=FALSE, message=FALSE}
+```{r formatar variáveis categóricas para análise descritiva saeb.2021.9EF, echo=FALSE}
+ saeb.2021.9EF$ID_REGIAO <- factor(saeb.2021.9EF$ID_REGIAO,
+                                   levels = c (1, 2, 3, 4, 5),
+                                   labels = c('Norte', 'Nordeste', 'Sudeste', 'Sul', 'Centro-Oeste'))
+
+saeb.2021.9EF$ID_AREA <- factor(saeb.2021.9EF$ID_AREA,
+                                levels = c (1, 2),
+                                labels = c('Capital', 'Interior'))
+
+saeb.2021.9EF$IN_PUBLICA <- factor(saeb.2021.9EF$IN_PUBLICA,
+                                   levels = c (0, 1),
+                                   labels = c('Privada', 'Pública'))
+
+saeb.2021.9EF$ID_LOCALIZACAO <- factor(saeb.2021.9EF$ID_LOCALIZACAO,
+                                       levels = c (1, 2),
+                                       labels = c('Urbana', 'Rural'))
+
+saeb.2021.9EF$TX_RESP_Q01 <- factor(saeb.2021.9EF$TX_RESP_Q01,
+                                    levels = c ('*', '.', 'A', 'B'),
+                                    labels = c('Nulo', 'Branco', 'Masculino', 'Feminino'))
+
+saeb.2021.9EF$TX_RESP_Q02 <- factor(saeb.2021.9EF$TX_RESP_Q02,
+                                    levels = c ('*', '.', 'A', 'B', 'C', 'D', 'E', 'F'),
+                                    labels = c('Nulo', 'Branco', '13 anos ou menos',
+                                               '14 anos', '15 anos', '16 anos',
+                                               '17 anos', '18 anos ou mais'))
+
+saeb.2021.9EF$TX_RESP_Q04 <- factor(saeb.2021.9EF$TX_RESP_Q04,
+                                    levels = c ('*', '.', 'A', 'B', 'C', 'D', 'E', 'F'),
+                                    labels = c('Nulo', 'Branco', 'Branca', 'Preta',
+                                               'Parda', 'Amarela', 'Indígena',
+                                               'Não quero declarar'))
+
+saeb.2021.9EF$TX_RESP_Q07 <- factor(saeb.2021.9EF$TX_RESP_Q07,
+                                    levels = c ('*', '.', 'A', 'B', 'C', 'D', 'E', 'F'),
+                                    labels = c('Nulo', 'Branco', 'Não completou o 5° ano do Ensino Fundamental',
+                                               'Ensino Fundamental, até o 5° ano',
+                                               'Ensino Fundamental completo',
+                                               'Ensino Médio completo',
+                                               'Ensino Superior completo (faculdade ou graduação)',
+                                               'Não sei'))
+
+saeb.2021.9EF$TX_RESP_Q08 <- factor(saeb.2021.9EF$TX_RESP_Q08,
+                                    levels = c ('*', '.', 'A', 'B', 'C', 'D', 'E', 'F'),
+                                    labels = c('Nulo', 'Branco', 'Não completou o 5° ano do Ensino Fundamental',
+                                               'Ensino Fundamental, até o 5° ano', 
+                                               'Ensino Fundamental completo',
+                                               'Ensino Médio completo',
+                                               'Ensino Superior completo (faculdade ou graduação)',
+                                               'Não sei'))
+
+saeb.2021.9EF$TX_RESP_Q18 <- factor(saeb.2021.9EF$TX_RESP_Q18,
+                                    levels = c ('*', '.', 'A', 'B', 'C'),
+                                    labels = c('Nulo', 'Branco', 'Não', 
+                                               'Sim, uma vez', 'Sim, duas vezes ou mais'))
+```
+
+```{r glimpse saeb.2021.5EF}
+glimpse(saeb.2021.5EF)
+```
+
+```{r glimpse saeb.2021.9EF}
+glimpse(saeb.2021.9EF)
+```
+
+
+Now, let's rename the variables.
+
+```{r renomear variáveis, echo=FALSE}
+saeb.2021.5EF <- saeb.2021.5EF %>%
+  rename(
+    "Região_Geográfica" = "ID_REGIAO",
+    "Area" = "ID_AREA",
+    "Rede_de_Ensino" = "IN_PUBLICA",
+    "Localização" = "ID_LOCALIZACAO",
+    "Sexo" = "TX_RESP_Q01",
+    "Idade" = "TX_RESP_Q02",
+    "Raça" = "TX_RESP_Q04",
+    "Escolaridade_Mãe" = "TX_RESP_Q07",
+    "Escolaridade_Pai" = "TX_RESP_Q08",
+    "Já_foi_reprovado" = "TX_RESP_Q18")
+
+saeb.2021.9EF <- saeb.2021.9EF %>%
+  rename(
+    "Região_Geográfica" = "ID_REGIAO",
+    "Area" = "ID_AREA",
+    "Rede_de_Ensino" = "IN_PUBLICA",
+    "Localização" = "ID_LOCALIZACAO",
+    "Sexo" = "TX_RESP_Q01",
+    "Idade" = "TX_RESP_Q02",
+    "Raça" = "TX_RESP_Q04",
+    "Escolaridade_Mãe" = "TX_RESP_Q07",
+    "Escolaridade_Pai" = "TX_RESP_Q08",
+    "Já_foi_reprovado" = "TX_RESP_Q18")
 
 ```
 
+
+Let's get some descriptive statistics such as mean and standard deviation of the
+achievement in math and portuguese. The results below are from students from the
+fifth year of elementary school.
+
+
+```{r estatísticas descritivas saeb.2021.5EF, echo=FALSE}
+saeb.2021.5EF %>% 
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  group_by(Sexo) %>%
+    summarize(Média_LP = mean(PROFICIENCIA_LP_SAEB, na.rm = TRUE),
+              Sd_LP = sd(PROFICIENCIA_LP_SAEB, na.rm = TRUE),
+              Média_MT = mean(PROFICIENCIA_MT_SAEB, na.rm = TRUE),
+              Sd_MT = sd(PROFICIENCIA_MT_SAEB, na.rm = TRUE))
+```
+
+Now, the results from the students from the ninth year of elementary school.
+
+```{r estatísticas descritivas saeb.2021.9EF, echo=FALSE}
+saeb.2021.9EF %>% 
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  group_by(Sexo) %>%
+    summarize(Média_LP = mean(PROFICIENCIA_LP_SAEB, na.rm = TRUE),
+              Sd_LP = sd(PROFICIENCIA_LP_SAEB, na.rm = TRUE),
+              Média_MT = mean(PROFICIENCIA_MT_SAEB, na.rm = TRUE),
+              Sd_MT = sd(PROFICIENCIA_MT_SAEB, na.rm = TRUE))
+```
+
+Let's count the number of students who do the test by age.
+The results below are from the students of the fifth year of elementary school.
+
+```{r idade dos estudantes 5° ano, echo=FALSE}
+saeb.2021.5EF %>%
+  filter(Idade %in% c("9 anos ou menos", "10 anos", "11 anos", "12 anos", "13 anos", " 14 anos ou mais")) %>%
+  group_by(Idade) %>%
+  summarize(count = n())
+```
+The results below are from the students of the ninth year of elementary school.
+
+```{r idade dos estudantes 9° ano, echo=FALSE}
+saeb.2021.9EF %>%
+  filter(Idade %in% c("13 anos ou menos", "14 anos", "15 anos", "16 anos", "17 anos", " 18 anos ou mais")) %>%
+  group_by(Idade) %>%
+  summarize(count = n())
+```
+
+How many students have been reproved? 
+The results below are from the students of the fifth year of elementary school.
+
+```{r alunos reprovados 5°ano, echo=FALSE}
+saeb.2021.5EF%>%
+  filter(Já_foi_reprovado %in% c("Não", "Sim, uma vez", "Sim, duas vezes ou mais")) %>%
+  group_by(Já_foi_reprovado) %>%
+  summarise(count = n())
+```
+
+The results from the students of the ninth year of elementary school.
+
+```{r alunos reprovados 9° ano, echo=FALSE}
+saeb.2021.9EF%>%
+  filter(Já_foi_reprovado %in% c("Não", "Sim, uma vez", "Sim, duas vezes ou mais")) %>%
+  group_by(Já_foi_reprovado) %>%
+  summarise(count = n())
+```
+
+The education economics literature shows the high correlation between parental 
+education and student performance. 
+Let's get some descriptive data about parents' education. 
+The results below are from the students' mother of the fifth year of elementary school.
+  
+```{r escolaridade mãe 5EF, echo=FALSE}
+saeb.2021.5EF %>%
+  filter(Escolaridade_Mãe %in% c("Não completou o 5° ano do Ensino Fundamental", 
+                                 "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo	",
+                                 "Ensino Médio completo", 
+                                 "Ensino Superior completo (faculdade ou graduação)")) %>%
+  group_by(Escolaridade_Mãe) %>%
+  summarise(Count = n())
+```
+
+The results below are from the students' father of the fifth year of elementary school.
+ 
+```{r escolaridade pai 5EF, echo=FALSE}
+saeb.2021.5EF %>%
+  filter(Escolaridade_Pai %in% c("Não completou o 5° ano do Ensino Fundamental", 
+                                 "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo	",
+                                 "Ensino Médio completo", 
+                                 "Ensino Superior completo (faculdade ou graduação)")) %>%
+  group_by(Escolaridade_Pai) %>%
+  summarise(Count = n())
+```
