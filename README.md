@@ -8,7 +8,8 @@ In this project I will:
   - import the microdata from my computer;
   - some exploratory data analysis;
   - some inference from data;
-  - econometric analysis. 
+  - econometric analysis.
+  - causal inference.
 
 The result of this exercise can be visualized at the following webpage:
 <https://osvaldoquintellajr.github.io/educational_data_analysis/>
