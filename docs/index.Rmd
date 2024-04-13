@@ -769,6 +769,53 @@ saeb.2021.9EF %>%
         axis.title.x = element_text(size = 11))
 ```
 
+
+#### Boxplot of student's achievement.
+
+
+```{r boxplot nota saeb 5EF língua portuguesa, echo=FALSE, warning=FALSE}
+saeb.2021.5EF %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  ggplot(aes(x = Sexo, y = PROFICIENCIA_LP_SAEB)) + 
+  geom_boxplot() +
+  theme_wsj() + 
+  ggtitle("Boxplot nota em língua portuguesa dos alunos do quinto ano do ensino fundamental.") +
+  theme(title = element_text(family = 'serif', size = 11)) + 
+  scale_y_continuous(limits = c(0, 400))
+```
+
+```{r boxplot nota saeb 5EF matemática, echo=FALSE, warning=FALSE}
+saeb.2021.5EF %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  ggplot(aes(x = Sexo, y = PROFICIENCIA_MT_SAEB)) + 
+  geom_boxplot() +
+  theme_wsj() + 
+  ggtitle("Boxplot da nota em matemática dos alunos do quinto ano do ensino fundamental.") +
+  theme(title = element_text(family = 'serif', size = 11)) + 
+  scale_y_continuous(limits = c(0, 400))
+```
+```{r boxplot nota saeb 9EF língua portuguesa, echo=FALSE, warning=FALSE}
+saeb.2021.9EF %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  ggplot(aes(x = Sexo, y = PROFICIENCIA_LP_SAEB)) + 
+  geom_boxplot() +
+  theme_wsj() + 
+  ggtitle("Boxplot nota em língua portuguesa dos alunos do nono ano do ensino fundamental.") +
+  theme(title = element_text(family = 'serif', size = 11)) + 
+  scale_y_continuous(limits = c(0, 400))
+```
+
+```{r boxplot nota saeb 9EF matemática, echo=FALSE, warning=FALSE}
+saeb.2021.9EF %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  ggplot(aes(x = Sexo, y = PROFICIENCIA_MT_SAEB)) + 
+  geom_boxplot() +
+  theme_wsj() + 
+  ggtitle("Boxplot nota em matemática dos alunos do nono ano do ensino fundamental.") +
+  theme(title = element_text(family = 'serif', size = 11)) + 
+  scale_y_continuous(limits = c(100, 400))
+```
+
 #### Inferential analysis 
 
 Now, let's do some basic inferential analysis.
