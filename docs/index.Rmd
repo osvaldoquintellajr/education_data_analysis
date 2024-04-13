@@ -296,7 +296,7 @@ censo.escolar %>%
 ```
 
 The graph above allows to conclude that the number of enrollments at elementary school
-is falling at rural areas and is growing at urban areas 
+is falling at rural areas and is growing at urban areas.
 
 The same happens to the number of enrollments at high school as we can see at the graph bellow.
 
@@ -579,6 +579,8 @@ saeb.2021.9EF <- saeb.2021.9EF %>%
 ```
 
 
+#### Mean and standard deviation of the achievement in math and portuguese.
+
 Let's get some descriptive statistics such as mean and standard deviation of the
 achievement in math and portuguese. The results below are from students from the
 fifth year of elementary school.
@@ -606,6 +608,9 @@ saeb.2021.9EF %>%
               Sd_MT = sd(PROFICIENCIA_MT_SAEB, na.rm = TRUE))
 ```
 
+#### The number of students by age
+
+
 Let's count the number of students who do the test by age.
 The results below are from the students of the fifth year of elementary school.
 
@@ -615,6 +620,7 @@ saeb.2021.5EF %>%
   group_by(Idade) %>%
   summarize(count = n())
 ```
+
 The results below are from the students of the ninth year of elementary school.
 
 ```{r idade dos estudantes 9° ano, echo=FALSE}
@@ -624,7 +630,8 @@ saeb.2021.9EF %>%
   summarize(count = n())
 ```
 
-How many students have been reproved? 
+#### How many sudents have been reproved?
+
 The results below are from the students of the fifth year of elementary school.
 
 ```{r alunos reprovados 5°ano, echo=FALSE}
@@ -643,10 +650,12 @@ saeb.2021.9EF%>%
   summarise(count = n())
 ```
 
+#### Level of parent's education.
+
 The education economics literature shows the high correlation between parental 
-education and student performance. 
-Let's get some descriptive data about parents' education. 
-The results below are from the students' mother of the fifth year of elementary school.
+education and student's performance. 
+Let's get some descriptive data about parent's education. 
+The results below are from the student's mother of the fifth year of elementary school.
   
 ```{r escolaridade mãe 5EF, echo=FALSE}
 saeb.2021.5EF %>%
@@ -669,3 +678,97 @@ saeb.2021.5EF %>%
   group_by(Escolaridade_Pai) %>%
   summarise(Count = n())
 ```
+
+
+The results below are from the students' mother of the ninth year of elementary school.
+
+
+```{r escolaridade mãe 9EF, echo=FALSE}
+saeb.2021.9EF %>%
+  filter(Escolaridade_Mãe %in% c("Não completou o 5° ano do Ensino Fundamental", 
+                                 "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo	",
+                                 "Ensino Médio completo", 
+                                 "Ensino Superior completo (faculdade ou graduação)")) %>%
+  group_by(Escolaridade_Mãe) %>%
+  summarise(Count = n())
+```
+
+ The results below are from the students' father of the ninth year of elementary school.
+
+```{r escolaridade pai 9EF, echo=FALSE}
+saeb.2021.9EF %>%
+  filter(Escolaridade_Pai %in% c("Não completou o 5° ano do Ensino Fundamental", 
+                                 "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo	",
+                                 "Ensino Médio completo", 
+                                 "Ensino Superior completo (faculdade ou graduação)")) %>%
+  group_by(Escolaridade_Pai) %>%
+  summarise(Count = n())
+```
+
+
+#### Probability distribution of student's achievement. 
+
+The probability distribution of student's achievement in portuguese by sex. 
+The results are from students of the fifth year of elementary school. 
+
+```{r distribuição de probabilidade das notas de meninos e meninas do 5EF em português, echo=FALSE, warning=FALSE}
+saeb.2021.5EF %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  ggplot(aes(x = PROFICIENCIA_LP_SAEB, color = Sexo)) + 
+  geom_density() +
+  theme_wsj() +
+  ggtitle("Distribuição de probabilidade da nota em língua portuguesa por sexo_5EF") +
+  theme(title = element_text(family = 'serif', size = 11),
+        legend.title = element_blank(),
+        axis.title.x = element_text(size = 11))
+```
+
+The probability distribution of student's achievement in math by sex. The results are from 
+students of the fifth year of elementary school. 
+
+```{r distribuição de probabilidade das notas de meninos e meninas do 5EF em matemática, echo=FALSE, warning=FALSE}
+saeb.2021.5EF %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  ggplot(aes(x = PROFICIENCIA_MT_SAEB, color = Sexo)) + 
+  geom_density() +
+  theme_wsj() +
+  ggtitle("Distribuição de probabilidade da nota em matemática por sexo_5EF") +
+  theme(title = element_text(family = 'serif', size = 11),
+        legend.title = element_blank(),
+        axis.title.x = element_text(size = 11)) +
+scale_y_continuous(limits = c(0,0.01))
+```
+
+The probability distribution of student's achievement in portuguese by sex. 
+The results are from students of the ninth year of elementary school. 
+
+```{r distribuição de probabilidade das notas de meninos e meninas do 9EF em português, echo=FALSE, warning=FALSE}
+saeb.2021.9EF %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  ggplot(aes(x = PROFICIENCIA_LP_SAEB, color = Sexo)) + 
+  geom_density() +
+  theme_wsj() +
+  ggtitle("Distribuição de probabilidade da nota em língua portuguesa por sexo_9EF") +
+  theme(title = element_text(family = 'serif', size = 11),
+        legend.title = element_blank(),
+        axis.title.x = element_text(size = 11))
+```
+
+The probability distribution of student's achievement in math by sex. The results are from 
+students of the ninth year of elementary school. 
+
+```{r distribuição de probabilidade das notas de meninos e meninas do 9EF em matemática, echo=FALSE, warning=FALSE}
+saeb.2021.9EF %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  ggplot(aes(x = PROFICIENCIA_MT_SAEB, color = Sexo)) + 
+  geom_density() +
+  theme_wsj() +
+  ggtitle("Distribuição de probabilidade da nota em matemática por sexo_9EF") +
+  theme(title = element_text(family = 'serif', size = 11),
+        legend.title = element_blank(),
+        axis.title.x = element_text(size = 11))
+```
+
+#### Inferential analysis 
+
+Now, let's do some basic inferential analysis.
