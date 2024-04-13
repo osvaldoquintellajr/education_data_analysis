@@ -21,6 +21,7 @@ The following code load the necessary packages.
 ```{r loading packages , include = TRUE, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(ggthemes)
+library(infer)
 ```
 
 The following code read the data from my computer. But I saved all the data on a .RData file. This file is uploaded to github so everyone can download it and check the code by yourself.
@@ -819,3 +820,5 @@ saeb.2021.9EF %>%
 #### **Inferential analysis.**
 
 Now, let's do some basic inferential analysis.
+
+It there a statistical significant difference between 
