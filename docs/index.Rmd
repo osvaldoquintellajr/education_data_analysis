@@ -14,7 +14,7 @@ knitr::opts_chunk$set(fig.align = 'center')
 options(scipen=999)
 ```
 
-## Exploratory Data Analysis of Censo Escolar
+## **Exploratory Data Analysis of Censo Escolar**
 
 The following code load the necessary packages.
 
@@ -223,7 +223,7 @@ Now, it is possible to see that we have the correct format of categorical variab
 glimpse(censo.escolar)
 ```
 
-#### Number of school enrollment at basic education.
+#### **Number of school enrollment at basic education.**
 
 
 After formatting the variables, let's make some exploratory data analysis.
@@ -316,7 +316,7 @@ censo.escolar %>%
 ```
 
 
-#### Proportion of school with fast internet connection.
+#### **Proportion of school with fast internet connection.**
 
 Now, let's visualize a table of the proportion of school with fast internet connection.
 
@@ -373,7 +373,7 @@ censo.escolar %>%
   geom_text(aes(label = round(Proporção_escolas_acesso_internet,2)), size = 3, color = 'black')
 ```
 
-### Exploratory Data Analysis of SAEB
+### **Exploratory Data Analysis of SAEB.**
 
 Reading data from saeb.2021.5EF and saeb.2021.9EF and select the variables we are going to use.
 
@@ -579,7 +579,7 @@ saeb.2021.9EF <- saeb.2021.9EF %>%
 ```
 
 
-#### Mean and standard deviation of the achievement in math and portuguese.
+#### **Mean and standard deviation of the achievement in math and portuguese.**
 
 Let's get some descriptive statistics such as mean and standard deviation of the
 achievement in math and portuguese. The results below are from students from the
@@ -608,7 +608,7 @@ saeb.2021.9EF %>%
               Sd_MT = sd(PROFICIENCIA_MT_SAEB, na.rm = TRUE))
 ```
 
-#### The number of students by age
+#### **The number of students by age.**
 
 
 Let's count the number of students who do the test by age.
@@ -630,7 +630,7 @@ saeb.2021.9EF %>%
   summarize(count = n())
 ```
 
-#### How many sudents have been reproved?
+#### **How many sudents have been reproved?**
 
 The results below are from the students of the fifth year of elementary school.
 
@@ -650,7 +650,7 @@ saeb.2021.9EF%>%
   summarise(count = n())
 ```
 
-#### Level of parent's education.
+#### **Level of parent's education.**
 
 The education economics literature shows the high correlation between parental 
 education and student's performance. 
@@ -706,7 +706,7 @@ saeb.2021.9EF %>%
 ```
 
 
-#### Probability distribution of student's achievement. 
+#### **Probability distribution of student's achievement.**
 
 The probability distribution of student's achievement in portuguese by sex. 
 The results are from students of the fifth year of elementary school. 
@@ -770,7 +770,7 @@ saeb.2021.9EF %>%
 ```
 
 
-#### Boxplot of student's achievement.
+#### **Boxplot of student's achievement.**
 
 
 ```{r boxplot nota saeb 5EF língua portuguesa, echo=FALSE, warning=FALSE}
@@ -816,6 +816,6 @@ saeb.2021.9EF %>%
   scale_y_continuous(limits = c(100, 400))
 ```
 
-#### Inferential analysis 
+#### **Inferential analysis.**
 
 Now, let's do some basic inferential analysis.
