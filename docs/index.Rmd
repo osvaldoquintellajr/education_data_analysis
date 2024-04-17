@@ -821,4 +821,57 @@ saeb.2021.9EF %>%
 
 Now, let's do some basic inferential analysis.
 
-It there a statistical significant difference between 
+Is there a statistical significant difference between boy's and girl's
+achievement? Let's answer this question.
+The null hypotheses says there is no difference between boy's and girl's average achievement.
+The alternative hypotheses says take girls has higher achievement than boys.
+
+The result bellow are the difference between the girl's achievement and 
+boy's achievement. 
+
+```{r cálculo da diferença entre a nota em portugues das meninas e dos meninos 5EF, echo=FALSE}
+saeb.2021.5EF %>%
+  select(PROFICIENCIA_LP_SAEB, Sexo) %>%
+  filter(Sexo %in% c('Masculino', 'Feminino')) %>%
+  filter(!is.na(PROFICIENCIA_LP_SAEB)) %>%
+  group_by(Sexo) %>%
+  summarise(mean_achievement = mean(PROFICIENCIA_LP_SAEB))%>%
+  pull() %>% diff()
+
+diff_mean_obs <- saeb.2021.5EF %>%
+  select(PROFICIENCIA_LP_SAEB, Sexo) %>%
+  filter(Sexo %in% c('Masculino', 'Feminino')) %>%
+  filter(!is.na(PROFICIENCIA_LP_SAEB)) %>%
+  group_by(Sexo) %>%
+  summarise(mean_achievement = mean(PROFICIENCIA_LP_SAEB))
+  
+ 
+```
+```{r gerar 1000 diferenças nas médias das notas via aleatorização, echo=FALSE}
+diff_mean_lp5ef <- saeb.2021.5EF %>%
+  select(PROFICIENCIA_LP_SAEB, Sexo) %>%
+  filter(Sexo %in% c('Masculino', 'Feminino') & !is.na(PROFICIENCIA_LP_SAEB)) %>%
+  specify(PROFICIENCIA_LP_SAEB ~ Sexo) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("Masculino", "Feminino"))
+
+head(diff_meanlp5ef, 6)
+```
+```{r regressão linear múltipla com dummy para sexo, echo=FALSE}
+saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
+  select(PROFICIENCIA_LP_SAEB, Sexo, Localização, Rede_de_Ensino, INSE_ALUNO, Raça,
+         Escolaridade_Mãe, Escolaridade_Pai, Já_foi_reprovado) %>%
+  filter(Sexo %in% c("Masculino", "Feminino") & 
+           Raça %in% c("Branca", "Preta", "Parda", "Amarela", "Indígena") & 
+           Escolaridade_Mãe %in% c("Não completou o 5° ano do Ensino Fundamental", "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo", "Ensino Médio completo", "Ensino Superior completo (faculdade ou graduação)") &
+           Escolaridade_Pai %in% c("Não completou o 5° ano do Ensino Fundamental", "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo", "Ensino Médio completo", "Ensino Superior completo (faculdade ou graduação)")) %>%
+  mutate(Sexo = if_else(Sexo == "Masculino", 1, 0),
+         Raça = if_else(Raça == "Branca", 1, 0),
+         Escolaridade_Mãe = if_else(Escolaridade_Mãe =='Ensino Superior completo (faculdade ou graduação)', 1, 0),
+         Escolaridade_Pai = if_else(Escolaridade_Pai == '))
+  
+  
+
+lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + )
+```
