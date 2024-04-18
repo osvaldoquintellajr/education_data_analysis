@@ -862,16 +862,19 @@ head(diff_meanlp5ef, 6)
 saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
   select(PROFICIENCIA_LP_SAEB, Sexo, Localização, Rede_de_Ensino, INSE_ALUNO, Raça,
          Escolaridade_Mãe, Escolaridade_Pai, Já_foi_reprovado) %>%
-  filter(Sexo %in% c("Masculino", "Feminino") & 
-           Raça %in% c("Branca", "Preta", "Parda", "Amarela", "Indígena") & 
-           Escolaridade_Mãe %in% c("Não completou o 5° ano do Ensino Fundamental", "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo", "Ensino Médio completo", "Ensino Superior completo (faculdade ou graduação)") &
-           Escolaridade_Pai %in% c("Não completou o 5° ano do Ensino Fundamental", "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo", "Ensino Médio completo", "Ensino Superior completo (faculdade ou graduação)")) %>%
+  filter(Sexo %in% c("Masculino", "Feminino")) %>%
+  filter(Raça %in% c("Branca", "Preta", "Parda", "Amarela", "Indígena")) %>%
+  filter(Escolaridade_Mãe %in% c("Não completou o 5° ano do Ensino Fundamental", "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo", "Ensino Médio completo", "Ensino Superior completo (faculdade ou graduação)")) %>%
+  filter(Escolaridade_Pai %in% c("Não completou o 5° ano do Ensino Fundamental", "Ensino Fundamental, até o 5° ano", "Ensino Fundamental completo", "Ensino Médio completo", "Ensino Superior completo (faculdade ou graduação)")) %>%
+  filter(Já_foi_reprovado %in% c('Não', 'Sim, uma vez', 'Sim, duas vezes ou mais')) %>%
   mutate(Sexo = if_else(Sexo == "Masculino", 1, 0),
+         Localização = if_else(Localização == "Urbana", 1, 0),
          Raça = if_else(Raça == "Branca", 1, 0),
          Escolaridade_Mãe = if_else(Escolaridade_Mãe =='Ensino Superior completo (faculdade ou graduação)', 1, 0),
-         Escolaridade_Pai = if_else(Escolaridade_Pai == '))
+         Escolaridade_Pai = if_else(Escolaridade_Pai == 'Ensino Superior completo (faculdade ou graduação)', 1, 0),
+         Já_foi_reprovado = if_else(Já_foi_reprovado %in% c('Sim, duas vezes ou mais', 'Sim, uma vez'),1,0))
   
-  
+my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai, data = saeb.2021.5EF.regressão)
 
-lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + )
+plot(residuals(my.model1))
 ```
