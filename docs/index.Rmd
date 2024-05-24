@@ -22,6 +22,7 @@ The following code load the necessary packages.
 library(tidyverse)
 library(ggthemes)
 library(infer)
+library(broom)
 ```
 
 The following code read the data from my computer. But I saved all the data on a .RData file. This file is uploaded to github so everyone can download it and check the code by yourself.
@@ -795,6 +796,8 @@ saeb.2021.5EF %>%
   theme(title = element_text(family = 'serif', size = 11)) + 
   scale_y_continuous(limits = c(0, 400))
 ```
+
+
 ```{r boxplot nota saeb 9EF língua portuguesa, echo=FALSE, warning=FALSE}
 saeb.2021.9EF %>%
   filter(Sexo %in% c("Masculino", "Feminino")) %>%
@@ -847,6 +850,8 @@ diff_mean_obs <- saeb.2021.5EF %>%
   
  
 ```
+
+
 ```{r gerar 1000 diferenças nas médias das notas via aleatorização, echo=FALSE}
 diff_mean_lp5ef <- saeb.2021.5EF %>%
   select(PROFICIENCIA_LP_SAEB, Sexo) %>%
@@ -858,6 +863,10 @@ diff_mean_lp5ef <- saeb.2021.5EF %>%
 
 head(diff_meanlp5ef, 6)
 ```
+
+
+
+
 ```{r regressão linear múltipla com dummy para sexo, echo=FALSE}
 saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
   select(PROFICIENCIA_LP_SAEB, Sexo, Localização, Rede_de_Ensino, INSE_ALUNO, Raça,
@@ -874,7 +883,16 @@ saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
          Escolaridade_Pai = if_else(Escolaridade_Pai == 'Ensino Superior completo (faculdade ou graduação)', 1, 0),
          Já_foi_reprovado = if_else(Já_foi_reprovado %in% c('Sim, duas vezes ou mais', 'Sim, uma vez'),1,0))
   
-my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai, data = saeb.2021.5EF.regressão)
+my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai + Já_foi_reprovado, data = saeb.2021.5EF.regressão)
 
-plot(residuals(my.model1))
+my.model1 <- augment(my.model1)
+
+ggplot(my.model1, aes(x = .fitted, y = .resid)) + geom_point() + geom_hline(yintercept = 0)
+
+
 ```
+It looks like the residuals associated with the model shows a violation of the linear technical conditions. Let's see the graphical relation between the response and explanatory variables.
+
+```{r }
+saeb.2021.5EF.regressão %>% ggplot(aes(x = log(Sexo), y = log(PROFICIENCIA_LP_SAEB))) + geom_point()
+```   
