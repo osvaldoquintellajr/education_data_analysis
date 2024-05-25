@@ -23,6 +23,8 @@ library(tidyverse)
 library(ggthemes)
 library(infer)
 library(broom)
+library(stargazer)
+library(modelsummary)
 ```
 
 The following code read the data from my computer. But I saved all the data on a .RData file. This file is uploaded to github so everyone can download it and check the code by yourself.
@@ -781,8 +783,8 @@ saeb.2021.5EF %>%
   ggplot(aes(x = Sexo, y = PROFICIENCIA_LP_SAEB)) + 
   geom_boxplot() +
   theme_wsj() + 
-  ggtitle("Boxplot nota em língua portuguesa dos alunos do quinto ano do ensino fundamental.") +
-  theme(title = element_text(family = 'serif', size = 11)) + 
+  ggtitle("Boxplot nota em língua portuguesa_quinto ano do ensino fundamental.") +
+  theme(title = element_text(family = 'serif', size = 10)) + 
   scale_y_continuous(limits = c(0, 400))
 ```
 
@@ -792,7 +794,7 @@ saeb.2021.5EF %>%
   ggplot(aes(x = Sexo, y = PROFICIENCIA_MT_SAEB)) + 
   geom_boxplot() +
   theme_wsj() + 
-  ggtitle("Boxplot da nota em matemática dos alunos do quinto ano do ensino fundamental.") +
+  ggtitle("Boxplot da nota em matemática_quinto ano do ensino fundamental.") +
   theme(title = element_text(family = 'serif', size = 11)) + 
   scale_y_continuous(limits = c(0, 400))
 ```
@@ -804,7 +806,7 @@ saeb.2021.9EF %>%
   ggplot(aes(x = Sexo, y = PROFICIENCIA_LP_SAEB)) + 
   geom_boxplot() +
   theme_wsj() + 
-  ggtitle("Boxplot nota em língua portuguesa dos alunos do nono ano do ensino fundamental.") +
+  ggtitle("Boxplot nota em língua portuguesa_nono ano do ensino fundamental.") +
   theme(title = element_text(family = 'serif', size = 11)) + 
   scale_y_continuous(limits = c(0, 400))
 ```
@@ -815,7 +817,7 @@ saeb.2021.9EF %>%
   ggplot(aes(x = Sexo, y = PROFICIENCIA_MT_SAEB)) + 
   geom_boxplot() +
   theme_wsj() + 
-  ggtitle("Boxplot nota em matemática dos alunos do nono ano do ensino fundamental.") +
+  ggtitle("Boxplot nota em matemática_nono ano do ensino fundamental.") +
   theme(title = element_text(family = 'serif', size = 11)) + 
   scale_y_continuous(limits = c(100, 400))
 ```
@@ -847,24 +849,20 @@ diff_mean_obs <- saeb.2021.5EF %>%
   filter(!is.na(PROFICIENCIA_LP_SAEB)) %>%
   group_by(Sexo) %>%
   summarise(mean_achievement = mean(PROFICIENCIA_LP_SAEB))
-  
- 
 ```
 
 
-```{r gerar 1000 diferenças nas médias das notas via aleatorização, echo=FALSE}
-diff_mean_lp5ef <- saeb.2021.5EF %>%
-  select(PROFICIENCIA_LP_SAEB, Sexo) %>%
-  filter(Sexo %in% c('Masculino', 'Feminino') & !is.na(PROFICIENCIA_LP_SAEB)) %>%
-  specify(PROFICIENCIA_LP_SAEB ~ Sexo) %>%
-  hypothesize(null = "independence") %>%
-  generate(reps = 1000, type = "permute") %>%
-  calculate(stat = "diff in means", order = c("Masculino", "Feminino"))
-
-head(diff_meanlp5ef, 6)
-```
-
-
+Now, the result of a linear regression.
+ - Sexo == 1 se masculino
+ - Sexo == 0 se feminino
+ - Localização == 1 se urbana
+ - Localização == 0 se rural
+ - Raça == 1 se branca
+ - Raça == 0 não branca
+ - Escolaridade_Mãe == 1 se tem ensino superior
+ - Escolaridade_Mãe == 0 se não tem ensino superior
+ - Escolaridade_pai == 1 se tem ensino superior
+ - Escolaridade_pai == 0 se não tem ensino superior.
 
 
 ```{r regressão linear múltipla com dummy para sexo, echo=FALSE}
@@ -881,18 +879,29 @@ saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
          Raça = if_else(Raça == "Branca", 1, 0),
          Escolaridade_Mãe = if_else(Escolaridade_Mãe =='Ensino Superior completo (faculdade ou graduação)', 1, 0),
          Escolaridade_Pai = if_else(Escolaridade_Pai == 'Ensino Superior completo (faculdade ou graduação)', 1, 0),
-         Já_foi_reprovado = if_else(Já_foi_reprovado %in% c('Sim, duas vezes ou mais', 'Sim, uma vez'),1,0))
+         Já_foi_reprovado = if_else(Já_foi_reprovado %in% c('Sim, duas vezes ou mais', 'Sim, uma vez'),1,0),
+         PROFICIENCIA_LP_SAEB = PROFICIENCIA_LP_SAEB^0.8)
   
 my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai + Já_foi_reprovado, data = saeb.2021.5EF.regressão)
+summary(my.model1)
+```
 
+
+It is always important to check the residuals. 
+
+
+```{r }
 my.model1 <- augment(my.model1)
 
 ggplot(my.model1, aes(x = .fitted, y = .resid)) + geom_point() + geom_hline(yintercept = 0)
-
-
 ```
-It looks like the residuals associated with the model shows a violation of the linear technical conditions. Let's see the graphical relation between the response and explanatory variables.
 
-```{r }
-saeb.2021.5EF.regressão %>% ggplot(aes(x = log(Sexo), y = log(PROFICIENCIA_LP_SAEB))) + geom_point()
-```   
+
+It looks like the residuals associated with the model shows a violation of the linear technical conditions. 
+
+```{r Análise de resíduos no R, echo = FALSE}
+par(mfrow = c(2,2))
+plot(my.model1)
+layout(1)
+```
+
