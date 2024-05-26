@@ -879,8 +879,7 @@ saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
          Raça = if_else(Raça == "Branca", 1, 0),
          Escolaridade_Mãe = if_else(Escolaridade_Mãe =='Ensino Superior completo (faculdade ou graduação)', 1, 0),
          Escolaridade_Pai = if_else(Escolaridade_Pai == 'Ensino Superior completo (faculdade ou graduação)', 1, 0),
-         Já_foi_reprovado = if_else(Já_foi_reprovado %in% c('Sim, duas vezes ou mais', 'Sim, uma vez'),1,0),
-         PROFICIENCIA_LP_SAEB = PROFICIENCIA_LP_SAEB^0.8)
+         Já_foi_reprovado = if_else(Já_foi_reprovado %in% c('Sim, duas vezes ou mais', 'Sim, uma vez'),1,0))
   
 my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai + Já_foi_reprovado, data = saeb.2021.5EF.regressão)
 summary(my.model1)
@@ -905,3 +904,9 @@ plot(my.model1)
 layout(1)
 ```
 
+```{r Correção do modelo}
+saeb.2021.5EF.regressão %>%
+  mutate(PROFICIENCIA_LP_SAEB = PROFICIENCIA_LP_SAEB^0.7)
+my.model2 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai + Já_foi_reprovado, data = saeb.2021.5EF.regressão)
+summary(my.model2)
+```
