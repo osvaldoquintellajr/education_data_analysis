@@ -881,32 +881,10 @@ saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
          Escolaridade_Pai = if_else(Escolaridade_Pai == 'Ensino Superior completo (faculdade ou graduação)', 1, 0),
          Já_foi_reprovado = if_else(Já_foi_reprovado %in% c('Sim, duas vezes ou mais', 'Sim, uma vez'),1,0))
   
-my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai + Já_foi_reprovado, data = saeb.2021.5EF.regressão)
+my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai + Já_foi_reprovado + INSE_ALUNO, data = saeb.2021.5EF.regressão)
 summary(my.model1)
 ```
 
 
-It is always important to check the residuals. 
 
 
-```{r }
-my.model1 <- augment(my.model1)
-
-ggplot(my.model1, aes(x = .fitted, y = .resid)) + geom_point() + geom_hline(yintercept = 0)
-```
-
-
-It looks like the residuals associated with the model shows a violation of the linear technical conditions. 
-
-```{r Análise de resíduos no R, echo = FALSE}
-par(mfrow = c(2,2))
-plot(my.model1)
-layout(1)
-```
-
-```{r Correção do modelo}
-saeb.2021.5EF.regressão %>%
-  mutate(PROFICIENCIA_LP_SAEB = PROFICIENCIA_LP_SAEB^0.7)
-my.model2 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai + Já_foi_reprovado, data = saeb.2021.5EF.regressão)
-summary(my.model2)
-```
