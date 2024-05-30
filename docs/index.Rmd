@@ -551,7 +551,7 @@ glimpse(saeb.2021.9EF)
 ```
 
 
-Now, let's rename the variables.
+Now, let's rename the variables. 
 
 ```{r renomear variáveis, echo=FALSE}
 saeb.2021.5EF <- saeb.2021.5EF %>%
@@ -579,6 +579,9 @@ saeb.2021.9EF <- saeb.2021.9EF %>%
     "Escolaridade_Mãe" = "TX_RESP_Q07",
     "Escolaridade_Pai" = "TX_RESP_Q08",
     "Já_foi_reprovado" = "TX_RESP_Q18")
+
+str(saeb.2021.5EF)
+str(saeb.2021.9EF)
 
 ```
 
@@ -852,17 +855,17 @@ diff_mean_obs <- saeb.2021.5EF %>%
 ```
 
 
-Now, the result of a linear regression.
- - Sexo == 1 se masculino
- - Sexo == 0 se feminino
- - Localização == 1 se urbana
- - Localização == 0 se rural
- - Raça == 1 se branca
- - Raça == 0 não branca
- - Escolaridade_Mãe == 1 se tem ensino superior
- - Escolaridade_Mãe == 0 se não tem ensino superior
- - Escolaridade_pai == 1 se tem ensino superior
- - Escolaridade_pai == 0 se não tem ensino superior.
+- Now, let's check the summary of a linear regression. The variables are coded as follows:
+  - Sexo == 1 se masculino
+  - Sexo == 0 se feminino
+  - Localização == 1 se urbana
+  - Localização == 0 se rural
+  - Raça == 1 se branca
+  - Raça == 0 não branca
+  - Escolaridade_Mãe == 1 se tem ensino superior
+  - Escolaridade_Mãe == 0 se não tem ensino superior
+  - Escolaridade_pai == 1 se tem ensino superior
+  - Escolaridade_pai == 0 se não tem ensino superior.
 
 
 ```{r regressão linear múltipla com dummy para sexo, echo=FALSE}
@@ -885,6 +888,6 @@ my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolarida
 summary(my.model1)
 ```
 
-
+```{}
 
 
