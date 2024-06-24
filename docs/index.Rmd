@@ -21,6 +21,7 @@ The following code load the necessary packages.
 ```{r loading packages , include = TRUE, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(ggthemes)
+library(ggfortify)
 library(infer)
 library(broom)
 library(stargazer)
@@ -551,7 +552,7 @@ glimpse(saeb.2021.9EF)
 ```
 
 
-Now, let's rename the variables. 
+Now, let's rename the variables.
 
 ```{r renomear variáveis, echo=FALSE}
 saeb.2021.5EF <- saeb.2021.5EF %>%
@@ -579,9 +580,6 @@ saeb.2021.9EF <- saeb.2021.9EF %>%
     "Escolaridade_Mãe" = "TX_RESP_Q07",
     "Escolaridade_Pai" = "TX_RESP_Q08",
     "Já_foi_reprovado" = "TX_RESP_Q18")
-
-str(saeb.2021.5EF)
-str(saeb.2021.9EF)
 
 ```
 
@@ -713,64 +711,64 @@ saeb.2021.9EF %>%
 ```
 
 
-#### **Probability distribution of student's achievement.**
+#### **Distribution of student's achievement.**
 
-The probability distribution of student's achievement in portuguese by sex. 
+The distribution of student's achievement in portuguese by sex. 
 The results are from students of the fifth year of elementary school. 
 
-```{r distribuição de probabilidade das notas de meninos e meninas do 5EF em português, echo=FALSE, warning=FALSE}
+```{r distribuição das notas de meninos e meninas do 5EF em português, echo=FALSE, warning=FALSE}
 saeb.2021.5EF %>%
   filter(Sexo %in% c("Masculino", "Feminino")) %>%
   ggplot(aes(x = PROFICIENCIA_LP_SAEB, color = Sexo)) + 
   geom_density() +
   theme_wsj() +
-  ggtitle("Distribuição de probabilidade da nota em língua portuguesa por sexo_5EF") +
+  ggtitle("Distribuição da nota em língua portuguesa por sexo_5EF") +
   theme(title = element_text(family = 'serif', size = 11),
         legend.title = element_blank(),
         axis.title.x = element_text(size = 11))
 ```
 
-The probability distribution of student's achievement in math by sex. The results are from 
+The distribution of student's achievement in math by sex. The results are from 
 students of the fifth year of elementary school. 
 
-```{r distribuição de probabilidade das notas de meninos e meninas do 5EF em matemática, echo=FALSE, warning=FALSE}
+```{r distribuição das notas de meninos e meninas do 5EF em matemática, echo=FALSE, warning=FALSE}
 saeb.2021.5EF %>%
   filter(Sexo %in% c("Masculino", "Feminino")) %>%
   ggplot(aes(x = PROFICIENCIA_MT_SAEB, color = Sexo)) + 
   geom_density() +
   theme_wsj() +
-  ggtitle("Distribuição de probabilidade da nota em matemática por sexo_5EF") +
+  ggtitle("Distribuição da nota em matemática por sexo_5EF") +
   theme(title = element_text(family = 'serif', size = 11),
         legend.title = element_blank(),
         axis.title.x = element_text(size = 11)) +
 scale_y_continuous(limits = c(0,0.01))
 ```
 
-The probability distribution of student's achievement in portuguese by sex. 
+The distribution of student's achievement in portuguese by sex. 
 The results are from students of the ninth year of elementary school. 
 
-```{r distribuição de probabilidade das notas de meninos e meninas do 9EF em português, echo=FALSE, warning=FALSE}
+```{r distribuição das notas de meninos e meninas do 9EF em português, echo=FALSE, warning=FALSE}
 saeb.2021.9EF %>%
   filter(Sexo %in% c("Masculino", "Feminino")) %>%
   ggplot(aes(x = PROFICIENCIA_LP_SAEB, color = Sexo)) + 
   geom_density() +
   theme_wsj() +
-  ggtitle("Distribuição de probabilidade da nota em língua portuguesa por sexo_9EF") +
+  ggtitle("Distribuição da nota em língua portuguesa por sexo_9EF") +
   theme(title = element_text(family = 'serif', size = 11),
         legend.title = element_blank(),
         axis.title.x = element_text(size = 11))
 ```
 
-The probability distribution of student's achievement in math by sex. The results are from 
+The distribution of student's achievement in math by sex. The results are from 
 students of the ninth year of elementary school. 
 
-```{r distribuição de probabilidade das notas de meninos e meninas do 9EF em matemática, echo=FALSE, warning=FALSE}
+```{r distribuição das notas de meninos e meninas do 9EF em matemática, echo=FALSE, warning=FALSE}
 saeb.2021.9EF %>%
   filter(Sexo %in% c("Masculino", "Feminino")) %>%
   ggplot(aes(x = PROFICIENCIA_MT_SAEB, color = Sexo)) + 
   geom_density() +
   theme_wsj() +
-  ggtitle("Distribuição de probabilidade da nota em matemática por sexo_9EF") +
+  ggtitle("Distribuição da nota em matemática por sexo_9EF") +
   theme(title = element_text(family = 'serif', size = 11),
         legend.title = element_blank(),
         axis.title.x = element_text(size = 11))
@@ -866,10 +864,13 @@ diff_mean_obs <- saeb.2021.5EF %>%
   - Escolaridade_Mãe == 0 se não tem ensino superior
   - Escolaridade_pai == 1 se tem ensino superior
   - Escolaridade_pai == 0 se não tem ensino superior.
+  - Já_foi_reprovado == 1 se o aluno já foi reprovado.
+  - Já_foi_reprovado == 0 se o aluno nunca foi reprovado.
+  - INSE_ALUNO == Indicador do nível sócio-econômico do aluno (Variável que indica o nível sócio-econômico do aluno)
 
 
 ```{r regressão linear múltipla com dummy para sexo, echo=FALSE}
-saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
+saeb.2021.5EF.regressão <- saeb.2021.5EF %>% 
   select(PROFICIENCIA_LP_SAEB, Sexo, Localização, Rede_de_Ensino, INSE_ALUNO, Raça,
          Escolaridade_Mãe, Escolaridade_Pai, Já_foi_reprovado) %>%
   filter(Sexo %in% c("Masculino", "Feminino")) %>%
@@ -887,7 +888,4 @@ saeb.2021.5EF.regressão <- saeb.2021.5EF %>%
 my.model1 <- lm(PROFICIENCIA_LP_SAEB ~ Sexo + Localização + Raça + Escolaridade_Mãe +Escolaridade_Pai + Já_foi_reprovado + INSE_ALUNO, data = saeb.2021.5EF.regressão)
 summary(my.model1)
 ```
-
-```{}
-
 
